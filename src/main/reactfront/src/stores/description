@@ -1,0 +1,5 @@
+전역 상태 관리 (recoil이나 zustand 쓸 예정)
+
+state
+
+component > conponent > component >>>>>
