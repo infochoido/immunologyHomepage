@@ -25,11 +25,20 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.4.1'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'javax.validation:javax.validation-api:2.0.1.Final'
+	// Hibernate Validator (실제 유효성 검사 구현체)
+    implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
+
+    // Hibernate Validator의 의존성: Apache Commons Lang (옵션으로 필요)
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
