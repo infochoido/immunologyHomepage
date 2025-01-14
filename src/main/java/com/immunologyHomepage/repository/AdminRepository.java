@@ -1,5 +1,4 @@
 package com.immunologyHomepage.repository;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +8,7 @@ import com.immunologyHomepage.entity.AdminEntity;
 public interface AdminRepository extends JpaRepository<AdminEntity, String> {
 
     // 주어진 userName이 존재하는지 확인하는 메서드
-    boolean findByUserName(String userName);
+    boolean existsByUserName(String userName);
+
+    AdminEntity findByUserName(String userName);
 }
