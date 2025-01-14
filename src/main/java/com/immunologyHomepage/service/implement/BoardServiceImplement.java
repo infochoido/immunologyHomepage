@@ -29,8 +29,8 @@ public class BoardServiceImplement implements BoardService{
     @Override
     public ResponseEntity<? super PostBoardResponseDto> postBoard(postBoardRequestDto dto, String userName){
         try{
-            boolean existedAdminName = adminRepository.findByUserName(userName);
-            if(!existedAdminName) return PostBoardResponseDto.notExistUser();
+            boolean existedUserName = adminRepository.existsByUserName(userName);
+            if(!existedUserName) return PostBoardResponseDto.notExistUser();
 
             BoardEntity boardEntity = new BoardEntity(dto,userName);
             boardRepository.save(boardEntity);
@@ -48,10 +48,10 @@ public class BoardServiceImplement implements BoardService{
 
         }catch(Exception exception){
             exception.printStackTrace();
-            return ResponseDto.databaseError();
+            return ResponseDto.databaseError(); //데이터베이스 오류
         }
 
-        return PostBoardResponseDto.success();
+        return PostBoardResponseDto.success(); //게시글 성공적으로 저장시 응답
     }
     
 

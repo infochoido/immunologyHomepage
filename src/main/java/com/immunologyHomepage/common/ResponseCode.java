@@ -11,7 +11,8 @@ public interface ResponseCode {
     String VALIDATION_FAILED = "VF";
     String NOT_EXISTED_BOARD = "NB";
     String NOT_EXISTED_USER = "NU";
-
+    String SIGN_IN_FAIL = "SF";
+    String DUPLICATE_USERNAME ="DU";
     //HTTP Status 500
     String DATABASE_ERROR = "DE";
     

@@ -1,7 +1,6 @@
 package com.immunologyHomepage.dto.response.board;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import com.immunologyHomepage.common.ResponseCode;
