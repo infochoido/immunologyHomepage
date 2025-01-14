@@ -1,5 +1,7 @@
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 import RouterComponent from "../router/router";
+
 
 export default function Layout() {
     return (
@@ -9,9 +11,9 @@ export default function Layout() {
   
         {/* 메인 페이지 */}
         <RouterComponent />
-  
 
         {/* 푸터*/}
+        <Footer />
       </div>
     );
   }
