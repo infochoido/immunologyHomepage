@@ -2,7 +2,10 @@ package com.immunologyHomepage.service.implement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import com.immunologyHomepage.dto.request.auth.SignInRequestDto;
 import com.immunologyHomepage.dto.request.auth.SignUpRequestDto;
@@ -27,7 +30,7 @@ public class AuthServiceImplement implements AuthService{
     private final JwtProvider jwtProvider;
     
 
-    // private PasswordEncoder  passwordEncoder = new BCryptPasswordEncoder();
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
     @Override
     public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto){
@@ -38,7 +41,7 @@ public class AuthServiceImplement implements AuthService{
             if(existedUserName) return SignUpResponseDto.databaseError();
             
             String password = dto.getPassword();
-            // String encodedPassword = passwordEncoder.encode(password);
+            String encodedPassword = passwordEncoder.encode(password);
             dto.setPassword(password);
             AdminEntity adminEntity = new AdminEntity(dto);
             adminRepository.save(adminEntity);
@@ -66,10 +69,10 @@ public class AuthServiceImplement implements AuthService{
 
             String password = dto.getPassword();
             String encodedPassword = adminEntity.getPassword();
-            // boolean isMatched = passwordEncoder.matched(password,encodedPassword);
+            boolean isMatched = passwordEncoder.matches(password,encodedPassword);
             
 
-            // if(!isMatched) return SignInResponseDto.signInFailed();
+            if(!isMatched) return SignInResponseDto.signInFailed();
 
             
             // if(!isMatched) return SignInResponseDto.signInFailed();

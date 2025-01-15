@@ -27,6 +27,7 @@ public class AuthController {
     public ResponseEntity<? super SignUpResponseDto> signUp(
         @RequestBody @Valid SignUpRequestDto requestBody
         ){
+            System.out.println("sign-up endpoint called");
             ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody);
             return response;
         }
