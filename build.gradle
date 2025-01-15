@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation group: 'io.jsonwebtoken', name:'jjwt', version:'0.9.1'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.4.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -40,6 +41,7 @@ dependencies {
     // Hibernate Validator의 의존성: Apache Commons Lang (옵션으로 필요)
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {

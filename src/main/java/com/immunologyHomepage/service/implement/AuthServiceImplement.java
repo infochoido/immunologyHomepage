@@ -10,6 +10,7 @@ import com.immunologyHomepage.dto.response.ResponseDto;
 import com.immunologyHomepage.dto.response.auth.SignInResponseDto;
 import com.immunologyHomepage.dto.response.auth.SignUpResponseDto;
 import com.immunologyHomepage.entity.AdminEntity;
+import com.immunologyHomepage.provider.JwtProvider;
 import com.immunologyHomepage.repository.AdminRepository;
 import com.immunologyHomepage.service.AuthService;
 
@@ -23,7 +24,7 @@ public class AuthServiceImplement implements AuthService{
     private final AdminRepository adminRepository;
     
 
-    // private final JwtProvider jwtPrivider;
+    private final JwtProvider jwtProvider;
     
 
     // private PasswordEncoder  passwordEncoder = new BCryptPasswordEncoder();
@@ -65,11 +66,17 @@ public class AuthServiceImplement implements AuthService{
 
             String password = dto.getPassword();
             String encodedPassword = adminEntity.getPassword();
+            // boolean isMatched = passwordEncoder.matched(password,encodedPassword);
+            
 
-            // boolean isMatched passwordEncoder.matched(password,encodedPassword);
             // if(!isMatched) return SignInResponseDto.signInFailed();
 
-            // token = jwtProvider.create(userName);
+            
+            // if(!isMatched) return SignInResponseDto.signInFailed();
+
+            
+
+            token = jwtProvider.create(userName);
 
 
         }catch(Exception exception){
