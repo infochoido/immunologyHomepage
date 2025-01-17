@@ -19,9 +19,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        cardBlue: "#B3E5FC", // 파스텔 하늘색
-        cardOrange: "#FFE0B2", // 파스텔 주황색
-        cardGreen: "#C8E6C9", // 파스텔 초록색
+        cardBlue: "#7A91C4", // 파스텔 하늘색
+        cardOrange: "#FFAA34", // 파스텔 주황색
+        cardGreen: "#74D261", // 파스텔 초록색
         backgroundGreen: "#F1F8E9", // 파스텔 민트/연두색 (배경색)
       },
     },
