@@ -5,7 +5,7 @@ export default function Home() {
     return (
     <div className="relative">
         <Banner />
-        <div className="-mt-[160px] relative z-10">
+        <div className="-mt-[330px] relative z-10">
           <InfoCard />
         </div>
       </div>

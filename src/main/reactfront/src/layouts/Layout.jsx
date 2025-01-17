@@ -8,7 +8,7 @@ export default function Layout() {
       <header>
         <NavBar />
       </header>
-      <main className="flex-grow mt-0">
+      <main className="mt-0">
         <Outlet />
       </main>
       <footer className="text-white">
