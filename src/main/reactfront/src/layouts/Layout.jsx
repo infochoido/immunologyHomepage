@@ -3,7 +3,6 @@ import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import InfoCard from "../components/InfoCard";
 import RouterComponent from "../router/router";
-import AboutUs from "../components/AboutUs";
 
 export default function Layout() {
   return (
@@ -15,7 +14,6 @@ export default function Layout() {
           <InfoCard />
         </div>
       </div>
-      <AboutUs />
       <div className="mt-64"></div> {/* 간격 추가 */}      
       <Footer />
     </div>

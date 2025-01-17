@@ -55,22 +55,10 @@ const toggleSubMenu = (menu) => {
     return(
         <div className="flex justify-between p-3 h-[90px] px-[100px]">
             {/* 로고 누르면 /으로 이동 */}
-            <div className="flex  gap-0 p-0 m-0">
-                <div className="flex  items-center justify-start basis-100 w-60 h-20">
-                    <BrowserRouter>
-                        <Link to="/"><img src="../assets/logo1.png" alt="logo1"/></Link>
-                    </BrowserRouter>
-                </div>
-                <div className="flex items-center justify-start basis-100 w-2 h-20">
-                    <BrowserRouter>
-                        <Link to="/"><img src="../assets/betweenlogo.png" alt="betweenlogo"/></Link>
-                    </BrowserRouter>
-                </div>
-                <div className="flex items-center justify-start w-60 h-20">
-                    <BrowserRouter>
-                        <Link to="/"><img src="../assets/logo2.png" alt="logo2" /></Link>
-                    </BrowserRouter>                    
-                </div>    
+            <div className="flex  gap-0 p-0 m-0 items-center">
+                <BrowserRouter>
+                    <Link to ="/"><img src="../assets/logo.png" alt = "logo"></img></Link>
+                </BrowserRouter>
             </div>
 
             {/* 네비게이션 바 */}
