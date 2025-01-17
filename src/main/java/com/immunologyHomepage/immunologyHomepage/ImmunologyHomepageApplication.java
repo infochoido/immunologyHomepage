@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.immunologyHomepage")
 @EntityScan(basePackages = "com.immunologyHomepage.entity")
 @EnableJpaRepositories("com.immunologyHomepage.repository")
 public class ImmunologyHomepageApplication {
