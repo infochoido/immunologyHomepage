@@ -1,7 +1,7 @@
 //Footer Component
 
 export default function Footer() {
-    return (<div className="flex flex-col">
+    return (<div className="flex flex-col w-full">
       <div className="bg-white h-24 flex justify-center items-center">
         <img src = "../assets/logo.png" alt = "logo"></img>
       </div>
