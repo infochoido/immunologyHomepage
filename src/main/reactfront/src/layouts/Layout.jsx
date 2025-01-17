@@ -1,19 +1,19 @@
+import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import RouterComponent from "../router/router";
-
 
 export default function Layout() {
-    return (
-      <div>
-        {/*네비게이션 바바 */}
+  return (
+    <div className="flex flex-col min-h-screen">
+      <header>
         <NavBar />
-  
-        {/* 메인 페이지 */}
-        <RouterComponent />
-
-        {/* 푸터*/}
+      </header>
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+      <footer className="text-white">
         <Footer />
-      </div>
-    );
-  }
+      </footer>
+    </div>
+  );
+}

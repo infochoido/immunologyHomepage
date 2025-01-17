@@ -1,10 +1,10 @@
-import './App.css';
-import Layout from './layouts/Layout';
+import "./App.css";
+import RouterComponent from "./router/router";
 
 function App() {
   return (
     <div className="App">
-        <Layout />
+      <RouterComponent />
     </div>
   );
 }

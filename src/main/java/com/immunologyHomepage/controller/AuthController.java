@@ -35,6 +35,7 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<? super SignInResponseDto> signIn(
         @RequestBody @Valid SignInRequestDto requestBody){
+            System.out.println("sign-in endpoint called");
             ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
             return response;
         }

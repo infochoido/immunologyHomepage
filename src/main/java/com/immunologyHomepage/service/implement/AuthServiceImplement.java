@@ -42,7 +42,7 @@ public class AuthServiceImplement implements AuthService{
             
             String password = dto.getPassword();
             String encodedPassword = passwordEncoder.encode(password);
-            dto.setPassword(password);
+            dto.setPassword(encodedPassword);
             AdminEntity adminEntity = new AdminEntity(dto);
             adminRepository.save(adminEntity);
 
