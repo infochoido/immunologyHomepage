@@ -1,0 +1,12 @@
+BASIC AUTHENTOCATION
+-사용자이름/비밀번호를 BASE64로 인코딩하여 Aitorization 헤더에 포함하여 전송
+-매우 안저하지 않음, SSL/TLS와 함께 사용
+
+
+AAuthorization: Basic~
+
+Bearer Token Authentication 
+- 헤더에 토큰을 포함하여 전송 Authorization 헤더에 포함하여 전송
+-JWT을 사용하여 인증
+-간단한 방식, 상태를 유지하지 않음, 확장성이 높음
+-토큰 노출 위험, 토큰 관리

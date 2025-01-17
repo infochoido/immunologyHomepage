@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+// import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.immunologyHomepage.dto.request.board.postBoardRequestDto;
 import com.immunologyHomepage.dto.response.board.PostBoardResponseDto;
 
@@ -24,8 +24,8 @@ public class BoardController {
 
     @PostMapping("")
     public ResponseEntity<? super PostBoardResponseDto> postBoard(
-        @RequestBody @Valid postBoardRequestDto requestBody,
-        @AuthenticationPrincipal String userName
+        @RequestBody @Valid postBoardRequestDto requestBody, String userName
+        // @AuthenticationPrincipal String userName
     ){
         ResponseEntity<? super PostBoardResponseDto> response =  boardService.postBoard(requestBody, userName);
         return response;
