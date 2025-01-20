@@ -8,10 +8,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import Collapse from "@mui/material/Collapse";
+import LogInBTN from "./LogInBTN";
+import { useCookies } from "react-cookie";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false); // Drawer 열림 상태
   const [openMenus, setOpenMenus] = useState({}); // 여러 하위 메뉴 상태 관리
+  const [cookie] = useCookies();
 
   const menuItems = [
     { text: "Professor", link: "/professor" },
@@ -40,6 +43,9 @@ export default function NavBar() {
       ],
     },
     { text: "Patent", link: "/patent" },
+    
+    // 로그인 상태일 때만 "Write" 메뉴 추가
+    ...(cookie.accessToken ? [{ text: "Write", link: "/board-write" }] : []),
   ];
 
   const toggleSubMenu = (menu) => {
@@ -144,12 +150,16 @@ export default function NavBar() {
                           </ListItem>
                         ))}
                       </List>
+                      
                     </Collapse>
-                  )}
+                  )}  
                 </div>
               ))}
             </List>
             <Divider />
+            <div className="m-4 mx-6 text-right">
+            <LogInBTN />
+            </div>
           </div>
         </Drawer>
       </div>

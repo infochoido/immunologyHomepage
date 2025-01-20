@@ -62,6 +62,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         AdminEntity adminEntity = adminRepository.findByUserName((userName));
         String role = adminEntity.getRole(); //ROLE_USER, ROLE_ADMIN
 
+
+        if (role == null || role.isEmpty()) {
+            throw new IllegalArgumentException("Role is missing or empty for user: " + userName);
+        }
+
+        System.out.println("User: " + userName + " with role: " + role);  // 권한 정보 로그
+
+        
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 
         //ROLE_DEVELOPER ROLE_BOSS

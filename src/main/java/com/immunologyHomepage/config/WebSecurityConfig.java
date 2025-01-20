@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                    .requestMatchers("/","/api/v1/auth/**", "/file/**").permitAll()
+                    .requestMatchers("/","/api/v1/auth/**", "/file/**", "/favicon.ico","/static/**","/index.html").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/api/v1/user/*").permitAll()  // 특정 경로 허용
                     .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()  // 그 외 요청은 인증 필요
@@ -88,7 +88,10 @@ class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint{
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
        
-                System.out.println("FailedAuthenticationEntryPoint triggered");
+            System.out.println("FailedAuthenticationEntryPoint triggered");
+            System.out.println("Request URL: " + request.getRequestURL());
+            System.out.println("Client IP: " + request.getRemoteAddr());
+            System.out.println("AuthenticationException: " + authException.getMessage());
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("{\"code:\": \"NP\", \"message\": \"Do not have Permission.\"}");

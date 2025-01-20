@@ -31,6 +31,7 @@ public class AdminEntity {
     public AdminEntity(SignUpRequestDto dto) {
         this.userName = dto.getUserName();
         this.password = dto.getPassword(); // 비밀번호를 그대로 저장할 경우, 암호화 고려
+        this.role = "ADMIN";
     }
 
     public String getRole() {

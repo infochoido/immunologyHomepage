@@ -1,6 +1,7 @@
 package com.immunologyHomepage.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +25,8 @@ public class BoardController {
 
     @PostMapping("")
     public ResponseEntity<? super PostBoardResponseDto> postBoard(
-        @RequestBody @Valid postBoardRequestDto requestBody, String userName
-        // @AuthenticationPrincipal String userName
+        @RequestBody @Valid postBoardRequestDto requestBody,
+        @AuthenticationPrincipal String userName
     ){
         ResponseEntity<? super PostBoardResponseDto> response =  boardService.postBoard(requestBody, userName);
         return response;
