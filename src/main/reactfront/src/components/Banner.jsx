@@ -35,6 +35,9 @@ export default function Banner() {
         <SwiperSlide>
           <img src="assets/banner3.png" alt="banner3" className="w-full h-full object-cover" />
         </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/banner4.jpg" alt="banner4" className="w-full h-full object-cover" />
+        </SwiperSlide>
       </Swiper>
     </div>
   );

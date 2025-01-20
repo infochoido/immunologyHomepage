@@ -1,5 +1,5 @@
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+
 
 // 테마 생성
 const theme = createTheme({

@@ -23,8 +23,10 @@ export default function RouterComponent() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+
           <Route path="professor" element={<Professor />} />
           <Route path="board-write" element={<ProtectedRoute element={<BoardWrite />} />} />
+          <Route path="member" element={<>menber</>} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>
