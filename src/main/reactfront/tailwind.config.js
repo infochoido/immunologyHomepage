@@ -23,6 +23,7 @@ module.exports = {
         cardOrange: "#FFAA34", // 파스텔 주황색
         cardGreen: "#74D261", // 파스텔 초록색
         backgroundGreen: "#F1F8E9", // 파스텔 민트/연두색 (배경색)
+        topBannerGray:'#525559',
       },
     },
   },
