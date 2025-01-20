@@ -7,8 +7,6 @@ import Button from '@mui/material/Button';
 import { signInRequest } from "../apis";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useRecoilState } from 'recoil';
-import { RecoiluserNameState } from './recoil';
 
 const style = {
   position: 'absolute',
@@ -30,7 +28,7 @@ export default function LogInBTN() {
   const [error, setError] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
-  const [recoiluserName, setRecoilUserName] = useRecoilState(RecoiluserNameState);
+
 
   // 로그인 여부를 쿠키에서 확인
   const isLoggedIn = cookie.accessToken !== undefined;
