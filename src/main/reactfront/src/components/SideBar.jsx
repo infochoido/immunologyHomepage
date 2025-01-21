@@ -1,20 +1,34 @@
-export default function SideBar(){
-    return(
-        <div class="basis-1/10">
-        <div class="flex justify-center h-20 bg-cardBlue1 items-center text-white text-3xl px-20 py-2">Professor</div>
-        <button class="w-full h-16 bg-white text-gray-800 text-xl text-left border border-gray-300 px-4 py-2 rounded shadow flex items-center justify-between hover:bg-gray-100 active:bg-gray-200 transition duration-200">
-        <span>Professor</span>
-        <svg
-            class="w-5 h-5 text-gray-600"
+// import React from "react";
+import { Link } from "react-router-dom";
+
+export default function SideBar({ title, subMenuItems }) {
+  return (
+    <div className="basis-1/10">
+      {/* 제목 */}
+      <div className="flex justify-center h-20 bg-cardBlue1 items-center text-white text-3xl px-20 py-2">
+        {title}
+      </div>
+
+      {/* 하위 메뉴 */}
+      {subMenuItems?.map((item, index) => (
+        <Link
+          key={index}
+          to={item.link} // 링크 경로 설정
+          className="block w-full h-16 bg-white text-gray-800 text-xl text-left border border-gray-300 px-4 py-2 rounded shadow flex items-center justify-between hover:bg-gray-100 active:bg-gray-200 transition duration-200"
+        >
+          <span>{item.text}</span>
+          <svg
+            className="w-5 h-5 text-gray-600"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
+            strokeWidth="2"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
-        >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-        </svg>
-        </button>
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </Link>
+      ))}
     </div>
-    )
+  );
 }
