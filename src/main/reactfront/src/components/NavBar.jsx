@@ -23,14 +23,14 @@ export default function NavBar() {
       link: null,
       subItems: [
         { text: "Members", link: "/member/members" },
-        { text: "Alumni", link: "/member/alumni" },
+        { text: "Alumni", link: "/member/alumnis" },
       ],
     },
     {
       text: "Research",
       link: null,
       subItems: [
-        { text: "Research", link: "/research" },
+        { text: "Research", link: "/research/research" },
         { text: "Project", link: "/research/project" },
       ],
     },
@@ -81,7 +81,7 @@ export default function NavBar() {
                 <>
                   {item.text}
                   {item.subItems && (
-                    <div className="absolute hidden group-hover:block bg-white border border-customGray shadow-lg rounded-lg">
+                    <div className="pt-2 absolute left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-white border border-customGray shadow-lg rounded-lg">
                       {item.subItems.map((subItem, subIndex) => (
                         <Link
                           key={subIndex}
