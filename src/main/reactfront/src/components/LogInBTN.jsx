@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import { signInRequest } from "../apis";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useLoginuserStore } from "../stores/store";
 
 const style = {
   position: 'absolute',
@@ -28,6 +29,7 @@ export default function LogInBTN() {
   const [error, setError] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
+  const {loginuser, setLoginuser, resetLoginuser} = useLoginuserStore();
 
 
   // 로그인 여부를 쿠키에서 확인
@@ -38,19 +40,29 @@ export default function LogInBTN() {
       alert('네트워크 이상 or 커스텀 알림');
       return;
     }
+
     const { code } = responseBody;
-    if(code === 'DE') alert("데이터베이스 오류");
+    if(code === 'DE') {
+      alert("데이터베이스 오류")
+    };
+
     if(code === 'SF' || code === 'VF') {
       setError(true);
+      resetLoginuser();
       return; // 실패하면 모달 닫지 않음
     }
-    if(code !== 'SU') {return};
 
+    if(code !== 'SU') {return};
+    
+    //성공처리
     const { token, expirationTime } = responseBody;
     const now = new Date().getTime();
     const expires = new Date(now + expirationTime * 1000);
-
+    const loginUser = {...responseBody };
     setCookie('accessToken', token, { expires, path: '/' });
+    setLoginuser(loginUser);
+    setError(false); //에러상태 초기화화
+    console.log(loginUser);
     navigate('/');
     handleClose();  // 성공하면 모달 닫기
   };
@@ -65,6 +77,7 @@ export default function LogInBTN() {
     removeCookie('accessToken', { path: '/' });
     navigate('/');
   };
+
 
   return (
     <div className="cursor-pointer">

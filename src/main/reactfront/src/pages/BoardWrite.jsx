@@ -1,56 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactQuill, { Quill } from "react-quill-new";
 import 'react-quill-new/dist/quill.snow.css'; // quill의 기본 스타일
-import { postRequest } from "../apis";
-// import QuillResizeImage from 'quill-resize-image';
-import { useRecoilValue } from 'recoil';
-import { RecoiluserNameState } from "../stores/Recoil"; // Recoil 상태가 저장된 파일 경로
+import { postBoardRequest } from "../apis";
 import { useNavigate } from "react-router-dom";
-import { Cookies } from "react-cookie";
-
-// // 이미지 리사이즈 모듈을 Quill에 등록
-// Quill.register("modules/resize", QuillResizeImage);
+import { Cookies, useCookies } from "react-cookie";
+import { useBoardStore, useLoginuserStore } from "../stores/store";
+import { fileUploadRequest } from "../apis"; // 이미지 업로드 API 요청
 
 export default function BoardWrite() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const { title, setTitle, content, boardImageList, setBoardImageList, setContent, resetBoard } = useBoardStore();
+  const { loginUser, setLoginUser, resetLoginUser } = useLoginuserStore();
+
+  const navigate = useNavigate();
   const quillRef = useRef(null);
-  const userName = useRecoilValue(RecoiluserNameState);
-//   const { loginUser } = userLoginUserStore();
-  const Navigate = useNavigate();
-
-//   useEffect(()=>{
-//     if(!loginUser){
-//         navigator("/");
-//         return;
-//     }
-//     resetBoard();
-//   },[])
-
-  // 버튼 클릭 시 처리
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const accessToken = Cookies.accessToken;
-    if(!accessToken) return;
-    const requestBody = {
-      title,
-      content,
-      writerNickname: userName, // 예시로 작성자 닉네임 추가 (로그인 후 가져올 값)
-    };
-
-    try {
-      // 서버로 데이터 전송
-      const response = await postRequest(requestBody, accessToken);
-      if (response) {
-        alert("게시물이 저장되었습니다!");
-      } else {
-        alert("게시물 저장에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("게시물 저장 중 오류 발생", error);
-      alert("게시물 저장 중 오류 발생");
-    }
-  };
+  const [cookies, setCookies] = useCookies();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // 퀼 에디터 설정
   const modules = {
@@ -63,10 +27,104 @@ export default function BoardWrite() {
       [{ list: "ordered" }, { list: "bullet" }],
       [{ indent: "-1" }, { indent: "+1" }],
     ],
-    ImageResize: {
-      parchment: Quill.import("parchment"),
-    },
   };
+
+  // 이미지 업로드 및 에디터에 삽입
+  const imageHandler = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+  
+    input.onchange = async () => {
+      const file = input.files[0];
+      console.log(file)
+      if (file) {
+        try {
+          const data = new FormData();
+          data.append("file", file);
+
+          console.log("FormData:", data);
+          // 이미지 업로드 API 호출
+          const url = await fileUploadRequest(data); // 이미지 업로드 함수
+          console.log("Image Upload Response:", url); // 업로드 응답 확인
+  
+          if (url) {
+            boardImageList.push(url);
+            console.log("Uploaded Image URL:", url); // 이미지 URL 출력
+  
+            console.log("Updated boardImageList:", boardImageList); // 업데이트된 리스트 확인
+  
+            // Quill 에디터에 이미지 URL 삽입
+            const quillEditor = quillRef.current.getEditor();
+            const range = quillEditor.getSelection();
+            if (range) {
+              quillEditor.insertEmbed(range.index, "image", url); // 이미지 URL 삽입
+            } else {
+              console.error("Selection error"); // 선택 범위가 없으면 에러 출력
+            }
+          }
+        } catch (error) {
+          console.error("Image upload failed:", error);
+        }
+      }
+    };
+  };
+
+   // Quill 에디터에 대한 설정 (툴바에 이미지를 삽입할 수 있도록 설정)
+   useEffect(() => {
+    const quill = quillRef.current.getEditor();
+    const toolbar = quill.getModule('toolbar');
+    toolbar.addHandler('image', imageHandler); // 툴바에서 이미지 버튼 클릭 시 imageHandler 호출
+  }, []);
+
+  // 게시글 API 응답 처리
+  const postBoardResponse = (responseBody) => {
+    if (!responseBody) return;
+    const { code } = responseBody;
+    if (code === 'AF' || code === 'NU') {
+      navigate('/');
+    }
+    if (code === 'VF') alert('제목과 내용은 필수입니다.');
+    if (code === 'DE') alert('데이터베이스 오류입니다.');
+    if (code !== 'SU') return;
+
+    resetBoard();
+    if (!loginUser) return;
+  };
+
+  // 게시글 업로드 버튼 클릭 시
+  const onSubmitButtonClickHandler = async () => {
+    console.log("업로드 버튼 클릭됨");
+    const accessToken = cookies.accessToken;
+    console.log(accessToken);
+    if (!accessToken) return;
+
+    const requestBody = {
+      title,
+      content,
+      boardImageList,
+    };
+
+    try {
+      console.log(requestBody);
+      const response = await postBoardRequest(requestBody, accessToken); // 게시글 API 요청
+      postBoardResponse(response); // 응답 처리
+      resetBoard();
+    } catch (error) {
+      console.error("Error posting board:", error);
+    }
+  };
+
+  // 페이지 로드 시 쿠키 검사
+  useEffect(() => {
+    const accessToken = cookies.accessToken;
+    if (!accessToken) {
+      navigate('/');
+      return;
+    }
+    resetBoard();
+  }, [cookies, navigate, resetBoard]);
 
   return (
     <div>
@@ -105,8 +163,8 @@ export default function BoardWrite() {
               ref={quillRef}
               modules={modules}
               placeholder="내용을 입력해 주세요"
-              onChange={(e) => {
-                setContent(e);
+              onChange={(value) => {
+                setContent(value);
               }}
               style={{ height: "600px" }}
             />
@@ -115,7 +173,7 @@ export default function BoardWrite() {
           {/* ======== Button ======== */}
           <div style={{ float: "right" }}>
             <button style={{ marginRight: "10px" }}>취소</button>
-            <button onClick={handleSubmit}>저장하기</button>
+            <button onClick={onSubmitButtonClickHandler}>업로드</button>
           </div>
         </div>
       </div>

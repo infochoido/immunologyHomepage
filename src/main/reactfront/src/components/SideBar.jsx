@@ -1,4 +1,5 @@
 export default function SideBar(){
+
     return(
         <div class="basis-1/10">
         <div class="flex justify-center h-20 bg-cardBlue1 items-center text-white text-3xl px-20 py-2">Professor</div>
