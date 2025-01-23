@@ -14,8 +14,6 @@ export default function BoardWrite() {
   const navigate = useNavigate();
   const quillRef = useRef(null);
   const [cookies, setCookies] = useCookies();
-  const [selectedImage, setSelectedImage] = useState(null);
-
   // 퀼 에디터 설정
   const modules = {
     toolbar: [
@@ -38,22 +36,22 @@ export default function BoardWrite() {
   
     input.onchange = async () => {
       const file = input.files[0];
-      console.log(file)
+      
       if (file) {
         try {
           const data = new FormData();
           data.append("file", file);
 
-          console.log("FormData:", data);
+          for (const [key, value] of data.entries()) {
+            console.log(`${key}:`, value);
+          }
+
           // 이미지 업로드 API 호출
           const url = await fileUploadRequest(data); // 이미지 업로드 함수
-          console.log("Image Upload Response:", url); // 업로드 응답 확인
+          
   
           if (url) {
             boardImageList.push(url);
-            console.log("Uploaded Image URL:", url); // 이미지 URL 출력
-  
-            console.log("Updated boardImageList:", boardImageList); // 업데이트된 리스트 확인
   
             // Quill 에디터에 이미지 URL 삽입
             const quillEditor = quillRef.current.getEditor();
@@ -88,14 +86,22 @@ export default function BoardWrite() {
     if (code === 'VF') alert('제목과 내용은 필수입니다.');
     if (code === 'DE') alert('데이터베이스 오류입니다.');
     if (code !== 'SU') return;
-
+    
+    alert('글쓰기 성공!');
     resetBoard();
+    const quillEditor = quillRef.current.getEditor();
+    quillEditor.setText(''); // 에디터 내용 비우기
     if (!loginUser) return;
   };
 
   // 게시글 업로드 버튼 클릭 시
   const onSubmitButtonClickHandler = async () => {
     console.log("업로드 버튼 클릭됨");
+
+    if (!title || !content) {
+      alert("제목과 내용은 필수입니다.");
+      return;
+    }
     const accessToken = cookies.accessToken;
     console.log(accessToken);
     if (!accessToken) return;
@@ -126,6 +132,7 @@ export default function BoardWrite() {
     resetBoard();
   }, [cookies, navigate, resetBoard]);
 
+
   return (
     <div>
       <div style={{ width: "100%", height: "90vh" }}>
@@ -133,7 +140,7 @@ export default function BoardWrite() {
           <div
             style={{
               marginBottom: "20px",
-              marginTop: "70px",
+              marginTop: "40px",
               fontSize: "20px",
               fontWeight: "bold",
             }}
@@ -142,6 +149,7 @@ export default function BoardWrite() {
           </div>
 
           {/* ======== Subject ======== */}
+          <div className="flex gap-4">
           <input
             className="Subject"
             placeholder="제목을 입력해 주세요"
@@ -156,6 +164,20 @@ export default function BoardWrite() {
               setTitle(e.target.value);
             }}
           />
+          <select 
+          className="Category"
+          placeholder="카테고리"
+          style={{
+            padding: "7px",
+            marginBottom: "10px",
+            width: "20%",
+            border: "1px solid lightGray",
+            fontSize: "15px",
+          }}
+          >
+            <option>Professor</option>
+          </select>
+          </div>
 
           <div style={{ height: "650px" }}>
             {/* ======== Quill ======== */}
