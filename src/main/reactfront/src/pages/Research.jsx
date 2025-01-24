@@ -1,5 +1,9 @@
+import PageTitle from "../components/PageTitle";
+
 export default function Research(){
     return(
-        <p>Research 소개</p>
+        <div>
+            <PageTitle/>
+        </div>
     )
 }

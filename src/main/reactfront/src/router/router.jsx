@@ -8,6 +8,7 @@ import Research from "../pages/Research";
 import Project from "../pages/Project";
 import Notice from "../pages/Notice";
 import BoardWrite from "../pages/BoardWrite";
+import BoardDetail from "../pages/BoardDetail";
 import { useCookies } from "react-cookie";
 
 function ProtectedRoute({ element }) {
@@ -33,6 +34,7 @@ export default function RouterComponent() {
           <Route path="research/research" element={<Research />} />
           <Route path="research/project" element={<Project />} />
           <Route path="notice" element={<Notice />} />
+          <Route path="boardDetail" element={<BoardDetail />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>

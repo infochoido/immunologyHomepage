@@ -1,4 +1,5 @@
 import React from "react";
+import PageTitle from "../components/PageTitle";
 
 const researchers = [
     {
@@ -41,8 +42,11 @@ const researchers = [
 
   export default function Alumni() {
     return (
+      <div>
+      <PageTitle/>
+      
       <div className="min-h-screen py-8 px-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Our Alumnis</h1>
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {researchers.map((researcher, index) => (
             <div
@@ -62,6 +66,7 @@ const researchers = [
             </div>
           ))}
         </div>
+      </div>
       </div>
     );
   };  

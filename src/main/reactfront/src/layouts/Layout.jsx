@@ -46,6 +46,11 @@ const menuItems = [
       { text: "Notice", link: "/notice" },
     ],
   },
+  { text: "BoardDetail", link: "/boardDetail",
+    subItems: [
+      { text: "BoardDetail", link: "/boardDetail" },
+    ],
+  },
 ];
 
 export default function Layout() {
