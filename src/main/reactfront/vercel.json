@@ -5,10 +5,10 @@
         "use": "@vercel/static"
       }
     ],
-    "proxies": [
+    "routes": [
       {
-        "source": "/api/*",
-        "destination": "https://your-backend-server.com/api/*"
+        "src": "/api/(.*)",
+        "dest": "http://13.125.255.131:8080/api/$1"
       }
     ]
   }
