@@ -46,4 +46,8 @@ public class BoardEntity {
         this.viewCount = 0;
         this.writerNickname = userName;
     }
+
+    public void increaseViewCont(){
+        this.viewCount++;
+    }
 }
