@@ -1,212 +1,173 @@
+// import React, { useEffect, useState } from "react";
+// import PageTitle from "../components/PageTitle";
+// import { Link } from "react-router-dom";
+// import axios from "axios";
+
+// export default function Notice() {
+//   const [data, setData] = useState([]);
+//   // 샘플 데이터를 준비합니다
+//   const sampleData = Array.from({ length: 50 }, (_, i) => ({
+//     id: i + 1,
+//     title: `Title ${i + 1}`,
+//     content: `Content ${i + 1}`,
+//     datetime: `2025-01-24`,
+//     category: `Category ${i % 5}`,
+//     view_count: Math.floor(Math.random() * 100),
+//     nickname: `User ${i + 1}`,
+//   }));
+
+//   const ITEMS_PER_PAGE = 10; // 한 번에 보여줄 데이터 개수
+//   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
+
+//   useEffect(()=>{
+    
+//     axios.get("http://13.125.255.131:8080/api/v1/board/category?category=notice").then((res)=>{
+//       console.log(res)
+//       setData(res.data.categoryList);
+//     })
+
+//   },[])
+
+//   // 더보기 버튼 클릭 시 표시 데이터를 증가시킴
+//   const handleLoadMore = () => {
+//     setVisibleItems((prev) => prev + ITEMS_PER_PAGE);
+//   };
+
+//   return (
+//     <div>
+//       <PageTitle />
+//       <div className="mx-16">
+//         <table className="mt-8 table table-lg text-center">
+//           <thead>
+//             <tr>
+//               <th className="px-2 text-left text-xl text-black">제목</th>
+//               <th className="px-2 text-right text-xl w-16 text-black">작성 시간</th>
+//               <th className="px-2 text-right text-xl w-2 text-black">조회수</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {sampleData.slice(0, visibleItems).map((item, index) => (
+//               <tr key={index}>
+//                 <td className="px-2 text-left hover:bg-gray-100">
+//                   <Link
+//                     className="cursor-pointer hover:underline"
+//                     to={{
+//                       pathname: "/noticedetail",
+//                       state: {
+//                         title: item.title, // 각 item의 제목을 state로 전달
+//                         content: item.content, // 추가 데이터 전달
+//                         datetime: item.datetime,
+//                         view_count: item.view_count,
+//                         nickname: item.nickname,
+//                       },
+//                     }}
+//                   >
+//                     {item.title}
+//                   </Link>
+//                 </td>
+//                 <td className="px-2 text-right w-16">{item.datetime}</td>
+//                 <td className="px-2 text-right w-2">{item.view_count}</td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//         {visibleItems < sampleData.length && (
+//           <div className="text-center my-4">
+//             <button
+//               className="mt-4 mb-16 btn bg-white text-black border border-gray-500 hover:bg-gray-100 rounded-lg"
+//               onClick={handleLoadMore}
+//             >
+//               더 보기 ({visibleItems}/{sampleData.length})
+//             </button>
+//           </div>
+//         )}
+//       </div>
+      
+//     </div>
+//   );
+// }
+import React, { useEffect, useState } from "react";
+import PageTitle from "../components/PageTitle";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
 export default function Notice() {
+  const [data, setData] = useState([]); // 서버에서 가져온 데이터를 저장
+  const ITEMS_PER_PAGE = 10; // 한 번에 보여줄 데이터 개수
+  const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE); // 현재 표시할 데이터 개수
+
+  useEffect(() => {
+    // 서버에서 데이터 가져오기
+    axios
+      .get("http://13.125.255.131:8080/api/v1/board/category?category=student")
+      .then((res) => {
+        // 응답 데이터에서 title, viewCount, writeDatetime만 추출
+        const formattedData = res.data.categoryList.map((item) => ({
+          board_number:item.boardNumber,
+          title: item.title,
+          viewCount: item.viewCount,
+          writeDatetime: item.writeDatetime,
+        }));
+        setData(formattedData); // 추출한 데이터를 상태에 저장
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 중 오류 발생:", error);
+      });
+  }, []);
+
+  // 더보기 버튼 클릭 시 표시 데이터를 증가시킴
+  const handleLoadMore = () => {
+    setVisibleItems((prev) => prev + ITEMS_PER_PAGE);
+  };
+
   return (
-    <div className="overflow-x-auto">
-      <table className="table table-xs">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>company</th>
-            <th>location</th>
-            <th>Last Login</th>
-            <th>Favorite Color</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>1</th>
-            <td>Cy Ganderton</td>
-            <td>Quality Control Specialist</td>
-            <td>Littel, Schaden and Vandervort</td>
-            <td>Canada</td>
-            <td>12/16/2020</td>
-            <td>Blue</td>
-          </tr>
-          <tr>
-            <th>2</th>
-            <td>Hart Hagerty</td>
-            <td>Desktop Support Technician</td>
-            <td>Zemlak, Daniel and Leannon</td>
-            <td>United States</td>
-            <td>12/5/2020</td>
-            <td>Purple</td>
-          </tr>
-          <tr>
-            <th>3</th>
-            <td>Brice Swyre</td>
-            <td>Tax Accountant</td>
-            <td>Carroll Group</td>
-            <td>China</td>
-            <td>8/15/2020</td>
-            <td>Red</td>
-          </tr>
-          <tr>
-            <th>4</th>
-            <td>Marjy Ferencz</td>
-            <td>Office Assistant I</td>
-            <td>Rowe-Schoen</td>
-            <td>Russia</td>
-            <td>3/25/2021</td>
-            <td>Crimson</td>
-          </tr>
-          <tr>
-            <th>5</th>
-            <td>Yancy Tear</td>
-            <td>Community Outreach Specialist</td>
-            <td>Wyman-Ledner</td>
-            <td>Brazil</td>
-            <td>5/22/2020</td>
-            <td>Indigo</td>
-          </tr>
-          <tr>
-            <th>6</th>
-            <td>Irma Vasilik</td>
-            <td>Editor</td>
-            <td>Wiza, Bins and Emard</td>
-            <td>Venezuela</td>
-            <td>12/8/2020</td>
-            <td>Purple</td>
-          </tr>
-          <tr>
-            <th>7</th>
-            <td>Meghann Durtnal</td>
-            <td>Staff Accountant IV</td>
-            <td>Schuster-Schimmel</td>
-            <td>Philippines</td>
-            <td>2/17/2021</td>
-            <td>Yellow</td>
-          </tr>
-          <tr>
-            <th>8</th>
-            <td>Sammy Seston</td>
-            <td>Accountant I</td>
-            <td>O'Hara, Welch and Keebler</td>
-            <td>Indonesia</td>
-            <td>5/23/2020</td>
-            <td>Crimson</td>
-          </tr>
-          <tr>
-            <th>9</th>
-            <td>Lesya Tinham</td>
-            <td>Safety Technician IV</td>
-            <td>Turner-Kuhlman</td>
-            <td>Philippines</td>
-            <td>2/21/2021</td>
-            <td>Maroon</td>
-          </tr>
-          <tr>
-            <th>10</th>
-            <td>Zaneta Tewkesbury</td>
-            <td>VP Marketing</td>
-            <td>Sauer LLC</td>
-            <td>Chad</td>
-            <td>6/23/2020</td>
-            <td>Green</td>
-          </tr>
-          <tr>
-            <th>11</th>
-            <td>Andy Tipple</td>
-            <td>Librarian</td>
-            <td>Hilpert Group</td>
-            <td>Poland</td>
-            <td>7/9/2020</td>
-            <td>Indigo</td>
-          </tr>
-          <tr>
-            <th>12</th>
-            <td>Sophi Biles</td>
-            <td>Recruiting Manager</td>
-            <td>Gutmann Inc</td>
-            <td>Indonesia</td>
-            <td>2/12/2021</td>
-            <td>Maroon</td>
-          </tr>
-          <tr>
-            <th>13</th>
-            <td>Florida Garces</td>
-            <td>Web Developer IV</td>
-            <td>Gaylord, Pacocha and Baumbach</td>
-            <td>Poland</td>
-            <td>5/31/2020</td>
-            <td>Purple</td>
-          </tr>
-          <tr>
-            <th>14</th>
-            <td>Maribeth Popping</td>
-            <td>Analyst Programmer</td>
-            <td>Deckow-Pouros</td>
-            <td>Portugal</td>
-            <td>4/27/2021</td>
-            <td>Aquamarine</td>
-          </tr>
-          <tr>
-            <th>15</th>
-            <td>Moritz Dryburgh</td>
-            <td>Dental Hygienist</td>
-            <td>Schiller, Cole and Hackett</td>
-            <td>Sri Lanka</td>
-            <td>8/8/2020</td>
-            <td>Crimson</td>
-          </tr>
-          <tr>
-            <th>16</th>
-            <td>Reid Semiras</td>
-            <td>Teacher</td>
-            <td>Sporer, Sipes and Rogahn</td>
-            <td>Poland</td>
-            <td>7/30/2020</td>
-            <td>Green</td>
-          </tr>
-          <tr>
-            <th>17</th>
-            <td>Alec Lethby</td>
-            <td>Teacher</td>
-            <td>Reichel, Glover and Hamill</td>
-            <td>China</td>
-            <td>2/28/2021</td>
-            <td>Khaki</td>
-          </tr>
-          <tr>
-            <th>18</th>
-            <td>Aland Wilber</td>
-            <td>Quality Control Specialist</td>
-            <td>Kshlerin, Rogahn and Swaniawski</td>
-            <td>Czech Republic</td>
-            <td>9/29/2020</td>
-            <td>Purple</td>
-          </tr>
-          <tr>
-            <th>19</th>
-            <td>Teddie Duerden</td>
-            <td>Staff Accountant III</td>
-            <td>Pouros, Ullrich and Windler</td>
-            <td>France</td>
-            <td>10/27/2020</td>
-            <td>Aquamarine</td>
-          </tr>
-          <tr>
-            <th>20</th>
-            <td>Lorelei Blackstone</td>
-            <td>Data Coordiator</td>
-            <td>Witting, Kutch and Greenfelder</td>
-            <td>Kazakhstan</td>
-            <td>6/3/2020</td>
-            <td>Red</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>company</th>
-            <th>location</th>
-            <th>Last Login</th>
-            <th>Favorite Color</th>
-          </tr>
-        </tfoot>
-      </table>
+    <div>
+      <PageTitle />
+      <div className="mx-16">
+        <table className="mt-8 table table-lg text-center">
+          <thead>
+            <tr>
+              <th className="px-2 text-left text-xl text-black">제목</th>
+              <th className="px-2 text-right text-xl w-16 text-black">작성 시간</th>
+              <th className="px-2 text-right text-xl w-2 text-black">조회수</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.slice(0, visibleItems).map((item, index) => (
+              <tr key={index}>
+                <td className="px-2 text-left hover:bg-gray-100">
+                <Link
+                  className="cursor-pointer hover:underline"
+                  to={{
+                    pathname: "/boardDetail",
+                    search: `?board_number=${item.board_number}`, // 쿼리 문자열 추가
+                    state: {
+                      title: item.title,
+                      datetime: item.writeDatetime,
+                      view_count: item.viewCount,
+                    },
+                  }}
+                >
+                  {item.title}
+                </Link>
+                </td>
+                <td className="px-2 text-right w-16">{item.writeDatetime}</td>
+                <td className="px-2 text-right w-2">{item.viewCount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {visibleItems < data.length && (
+          <div className="text-center my-4">
+            <button
+              className="mt-4 mb-16 btn bg-white text-black border border-gray-500 hover:bg-gray-100 rounded-lg"
+              onClick={handleLoadMore}
+            >
+              더 보기 ({visibleItems}/{data.length})
+            </button>
+          </div>
+        )}
+      </div>
     </div>
-  )
+  );
 }
