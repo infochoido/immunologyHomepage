@@ -1,8 +1,14 @@
 {
-    "rewrites": [
+    "builds": [
       {
-        "source": "/api/(.*)",
-        "destination": "http://13.125.255.131:8080/api/$1"
+        "src": "frontend/**/*",
+        "use": "@vercel/static"
+      }
+    ],
+    "proxies": [
+      {
+        "source": "/api/*",
+        "destination": "https://your-backend-server.com/api/*"
       }
     ]
   }
