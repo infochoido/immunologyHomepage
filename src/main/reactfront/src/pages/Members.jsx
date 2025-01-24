@@ -1,4 +1,5 @@
 import React from "react";
+import PageTitle from "../components/PageTitle";
 
 const researchers = [
     {
@@ -41,26 +42,29 @@ const researchers = [
 
   export default function Members() {
     return (
-      <div className="min-h-screen py-8 px-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Our Members</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {researchers.map((researcher, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <img
-                src={researcher.image}
-                alt={researcher.name}
-                className="w-full h-128"
-              />
-              <div className="p-4">
-                <h2 className="text-lg font-semibold">{researcher.name}</h2>
-                <p className="text-sm text-gray-600">{researcher.title}</p>
-                <p className="text-sm mt-2">{researcher.description}</p>
+      <div>
+        <PageTitle/>
+        <div className="min-h-screen py-8 px-4">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {researchers.map((researcher, index) => (
+              <div
+                key={index}
+                className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              >
+                <img
+                  src={researcher.image}
+                  alt={researcher.name}
+                  className="w-full h-128"
+                />
+                <div className="p-4">
+                  <h2 className="text-lg font-semibold">{researcher.name}</h2>
+                  <p className="text-sm text-gray-600">{researcher.title}</p>
+                  <p className="text-sm mt-2">{researcher.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     );
