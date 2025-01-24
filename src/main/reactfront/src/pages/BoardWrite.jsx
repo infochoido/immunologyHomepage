@@ -8,7 +8,7 @@ import { useBoardStore, useLoginuserStore } from "../stores/store";
 import { fileUploadRequest } from "../apis"; // 이미지 업로드 API 요청
 
 export default function BoardWrite() {
-  const { title, setTitle, content, boardImageList, setBoardImageList, setContent, resetBoard } = useBoardStore();
+  const { title, setTitle, content, boardImageList, setBoardImageList,category, setCategory, setContent, resetBoard } = useBoardStore();
   const { loginUser, setLoginUser, resetLoginUser } = useLoginuserStore();
 
   const navigate = useNavigate();
@@ -89,6 +89,10 @@ export default function BoardWrite() {
     
     alert('글쓰기 성공!');
     resetBoard();
+    setTitle('');
+    setCategory(''); // 카테고리 초기화
+    setContent(''); // 내용 초기화
+
     const quillEditor = quillRef.current.getEditor();
     quillEditor.setText(''); // 에디터 내용 비우기
     if (!loginUser) return;
@@ -98,8 +102,8 @@ export default function BoardWrite() {
   const onSubmitButtonClickHandler = async () => {
     console.log("업로드 버튼 클릭됨");
 
-    if (!title || !content) {
-      alert("제목과 내용은 필수입니다.");
+    if (!title || !content || !category) {
+      alert("제목, 내용, 카테고리는 필수입니다.");
       return;
     }
     const accessToken = cookies.accessToken;
@@ -109,6 +113,7 @@ export default function BoardWrite() {
     const requestBody = {
       title,
       content,
+      category,
       boardImageList,
     };
 
@@ -160,23 +165,29 @@ export default function BoardWrite() {
               border: "1px solid lightGray",
               fontSize: "15px",
             }}
+            value={title}
             onChange={(e) => {
               setTitle(e.target.value);
             }}
           />
-          <select 
-          className="Category"
-          placeholder="카테고리"
-          style={{
-            padding: "7px",
-            marginBottom: "10px",
-            width: "20%",
-            border: "1px solid lightGray",
-            fontSize: "15px",
-          }}
-          >
-            <option>Professor</option>
-          </select>
+          <select
+              className="Category"
+              style={{
+                padding: "7px",
+                marginBottom: "10px",
+                width: "20%",
+                border: "1px solid lightGray",
+                fontSize: "15px",
+              }}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)} // 카테고리 값 설정
+            >
+              <option value={null}>카테고리 선택</option>
+              <option value="Professor">Professor</option>
+              <option value="Student">Student</option>
+              <option value="Research">Research</option>
+              {/* 추가 카테고리 옵션을 여기에 넣을 수 있습니다. */}
+            </select>
           </div>
 
           <div style={{ height: "650px" }}>

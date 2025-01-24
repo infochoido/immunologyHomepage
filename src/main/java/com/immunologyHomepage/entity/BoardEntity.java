@@ -30,6 +30,7 @@ public class BoardEntity {
     private String content;
     private String writeDateTime;
     private String writerNickname;
+    private String category;
     private int viewCount;
     
     public BoardEntity(postBoardRequestDto dto, String userName){
@@ -38,6 +39,7 @@ public class BoardEntity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String writeDateTime = simpleDateFormat.format(now);
         
+        this.category = dto.getCategory();
         this.title = dto.getTitle();
         this.content = dto.getContent();
         this.writeDateTime = writeDateTime;
