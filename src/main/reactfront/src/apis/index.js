@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const DOMAIN = 'http://localhost:8080';
+const DOMAIN = 'http://13.125.255.131:8080';
 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 

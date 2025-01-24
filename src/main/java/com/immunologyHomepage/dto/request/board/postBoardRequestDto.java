@@ -20,6 +20,12 @@ public class postBoardRequestDto {
     private String content;
     @NotNull
     private List<String> boardImageList;
+    @NotNull
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
 
     public String getTitle() {
         return title;
