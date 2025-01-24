@@ -1,7 +1,7 @@
 {
     "builds": [
       {
-        "src": "reactfrontend/**/*",
+        "src": "reactfront/**/*",
         "use": "@vercel/static"
       }
     ],
