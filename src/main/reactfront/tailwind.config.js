@@ -20,5 +20,7 @@ module.exports = {
       },// 모바일 환경에서 css 이걸로 쓰십쇼
     },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'),
+  ],
 }

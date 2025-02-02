@@ -1,7 +1,7 @@
 package com.immunologyHomepage.config;
 
 import java.io.IOException;
-
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,10 +67,11 @@ public class WebSecurityConfig {
     protected CorsConfigurationSource corsConfigurationSource(){
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "https://immunology-homepage.vercel.app"));
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
-
+        corsConfiguration.addExposedHeader("Authorization");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/v1/**", corsConfiguration);
 

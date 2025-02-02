@@ -27,17 +27,21 @@ export default function Banner() {
         modules={[Navigation, Pagination, Autoplay]} // 필요한 모듈 추가
       >
         <SwiperSlide>
-          <img src="assets/new_banner1.jpg" alt="banner1" className="w-full h-full object-cover" />
+          <img src="assets/piglet.jpg" alt="piglet" className="w-full h-full object-cover" />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="assets/new_banner2.jpg" alt="banner2" className="w-full h-full object-cover" />
+          <img src="assets/virus.jpg" alt="virus" className="w-full h-full object-cover" />
         </SwiperSlide>
         <SwiperSlide>
+          <img src="assets/surgery.jpg" alt="banner1" className="w-full h-full object-cover" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="assets/immunology.jpg" alt="banner2" className="w-full h-full object-cover" />
+        </SwiperSlide>
+        {/* <SwiperSlide>
           <img src="assets/new_banner3.jpg" alt="banner3" className="w-full h-full object-cover" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="assets/banner4.jpg" alt="banner4" className="w-full h-full object-cover" />
-        </SwiperSlide>
+        </SwiperSlide> */}
+        
       </Swiper>
     </div>
   );
