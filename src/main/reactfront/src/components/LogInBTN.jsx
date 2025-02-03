@@ -24,65 +24,69 @@ export default function LogInBTN() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [userName, setUserName] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
-  const [cookie, setCookie, removeCookie] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
   const navigate = useNavigate();
-  const {loginuser, setLoginuser, resetLoginuser} = useLoginuserStore();
+  const { setLoginuser, resetLoginuser } = useLoginuserStore();
 
-
-  // 로그인 여부를 쿠키에서 확인
-  const isLoggedIn = cookie.accessToken !== undefined;
-
-  const signInResponse = (responseBody) => {
-    if(!responseBody){
-      alert('네트워크 이상 or 커스텀 알림');
-      return;
-    }
-
-    const { code } = responseBody;
-    if(code === 'DE') {
-      alert("데이터베이스 오류")
-    };
-
-    if(code === 'SF' || code === 'VF') {
-      setError(true);
-      resetLoginuser();
-      return; // 실패하면 모달 닫지 않음
-    }
-
-    if(code !== 'SU') {return};
-    
-    //성공처리
-    const { token, expirationTime } = responseBody;
-    const now = new Date().getTime();
-    const expires = new Date(now + expirationTime * 1000);
-    const loginUser = {...responseBody };
-    setCookie('accessToken', token, { expires, path: '/' });
-    setLoginuser(loginUser);
-    setError(false); //에러상태 초기화화
-    console.log(loginUser);
-    navigate('/');
-    handleClose();  // 성공하면 모달 닫기
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const requestBody = { userName, password };
-    signInRequest(requestBody).then(signInResponse);
+    
+    try {
+        const requestBody = {
+            userName: userName,
+            password: password
+        };
+        
+        const response = await signInRequest(requestBody);
+        console.log('로그인 응답:', response);
+        
+        if (response.code === 'SU') {
+            const { token } = response;
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (60 * 60 * 1000)); // 1시간
+            
+            setCookie('accessToken', token, {
+                path: '/',
+                expires,
+                secure: true,
+                sameSite: 'strict'
+            });
+            
+            setLoginuser(response);
+            setError(false);
+            setOpen(false);
+            window.location.reload(); // 페이지 새로고침
+        } else {
+            alert('로그인에 실패했습니다.');
+        }
+    } catch (error) {
+        console.error('로그인 에러:', error);
+        alert('로그인 처리 중 오류가 발생했습니다.');
+    }
   };
 
   const handleLogout = () => {
     removeCookie('accessToken', { path: '/' });
-    navigate('/');
+    resetLoginuser();
+    window.location.href = '/';
   };
 
+  // 컴포넌트 마운트 시 토큰 확인
+  useEffect(() => {
+    const token = cookies.accessToken;
+    if (token) {
+      // 토큰 유효성 검사 로직 추가 가능
+      console.log('토큰 존재:', token);
+    }
+  }, [cookies.accessToken]);
 
   return (
     <div className="cursor-pointer">
-      <p className="text-xs" onClick={isLoggedIn ? handleLogout : handleOpen}>
-        {isLoggedIn ? 'LOGOUT' : 'LOGIN'}
+      <p className="text-xs" onClick={cookies.accessToken ? handleLogout : handleOpen}>
+        {cookies.accessToken ? 'LOGOUT' : 'LOGIN'}
       </p>
       <Modal
         open={open}
@@ -101,6 +105,7 @@ export default function LogInBTN() {
               label="User Name"
               variant="standard"
               fullWidth
+              autoComplete="username"
               onChange={(e) => setUserName(e.target.value)}
               sx={{ mb: 2 }}
               error={error}

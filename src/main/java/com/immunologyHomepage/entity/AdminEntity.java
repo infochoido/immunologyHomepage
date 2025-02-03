@@ -10,27 +10,26 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-
-
-@Entity(name="user")
-@Table(name="user")
+@Entity
+@Table(name = "\"user\"")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminEntity {
 
     @Id
-    @Column(name = "nickname")
+    @Column(name = "\"nickname\"")
     private String userName;
+    
+    @Column(name = "\"password\"")
     private String password;
 
-    @Column(name = "role") // 역할을 나타내는 컬럼 추가
+    @Column(name = "\"role\"")
     private String role;
 
     public AdminEntity(SignUpRequestDto dto) {
         this.userName = dto.getUserName();
-        this.password = dto.getPassword(); // 비밀번호를 그대로 저장할 경우, 암호화 고려
+        this.password = dto.getPassword();
         this.role = "ADMIN";
     }
 

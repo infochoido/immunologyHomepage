@@ -15,5 +15,6 @@ public interface ResponseCode {
     String DUPLICATE_USERNAME ="DU";
     //HTTP Status 500
     String DATABASE_ERROR = "DE";
+    String NO_PERMISSION = "NP";
     
 }

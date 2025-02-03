@@ -1,14 +1,17 @@
 package com.immunologyHomepage.controller;
 
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,39 +20,58 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.immunologyHomepage.dto.response.FileUploadResponse;
 import com.immunologyHomepage.service.FileService;
 
-import jakarta.persistence.criteria.Path;
 import lombok.RequiredArgsConstructor;
-
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
-@RequestMapping("/file") // "/file" 경로로 요청을 받음
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class FileController {
+
     private final FileService fileService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/upload") // "/file/upload" 경로로 POST 요청을 받음
-    public String upload(
-        @RequestParam("file") MultipartFile file
-    ){
-        System.out.println("File upload requested");
-        String url = fileService.upload(file);
-        if (url == null) {
-            return "파일 업로드 실패";
+    @PostMapping("/upload")
+    public ResponseEntity<FileUploadResponse> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            String fileName = fileService.uploadFile(file);
+            if (fileName == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            
+            // 전체 URL 경로로 변경
+            String fileUrl = "/api/v1/images/" + fileName;
+            return ResponseEntity.ok(new FileUploadResponse(fileUrl));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
         }
-        return url;
     }
 
-    @GetMapping(value = "{fileName}", produces={MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public Resource getImage(
-        @PathVariable("fileName") String fileName
-    ){
-        Resource resource = fileService.getImage(fileName);
-        return resource;
+    @GetMapping("/images/{fileName}")
+    public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
+        try {
+            Resource resource = fileService.loadFileAsResource(fileName);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(resource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
     }
-    
-    
+
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
 }

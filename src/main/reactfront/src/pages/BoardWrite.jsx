@@ -1,80 +1,73 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import ReactQuill, { Quill } from "react-quill-new";
 import 'react-quill-new/dist/quill.snow.css'; // quill의 기본 스타일
-import { postBoardRequest } from "../apis";
+import { postBoardRequest, uploadImage, uploadFileRequest } from "../apis";
 import { useNavigate } from "react-router-dom";
-import { Cookies, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { useBoardStore, useLoginuserStore } from "../stores/store";
-import { fileUploadRequest } from "../apis"; // 이미지 업로드 API 요청
 
 export default function BoardWrite() {
-  const { title, setTitle, content, boardImageList, setBoardImageList,category, setCategory, setContent, resetBoard } = useBoardStore();
-  const { loginUser, setLoginUser, resetLoginUser } = useLoginuserStore();
-
+  const quillRef = useRef();
   const navigate = useNavigate();
-  const quillRef = useRef(null);
-  const [cookies, setCookies] = useCookies();
-  // 퀼 에디터 설정
-  const modules = {
-    toolbar: [
-      [{ font: [] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike", "blockquote", "code-block"],
-      ["link", "image"],
-      [{ align: [] }, { color: [] }, { background: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }],
-    ],
-  };
+  const [cookies] = useCookies(['accessToken']);
+  const { title, setTitle, content, boardImageList, setBoardImageList, category, setCategory, setContent, resetBoard } = useBoardStore();
+  const { loginUser, setLoginUser, resetLoginUser } = useLoginuserStore();
+  const [uploadedUrls, setUploadedUrls] = useState([]); // 업로드된 이미지 URL 저장
 
-  // 이미지 업로드 및 에디터에 삽입
-  const imageHandler = () => {
+  const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
-    input.click();
-  
+    
     input.onchange = async () => {
       const file = input.files[0];
-      
       if (file) {
         try {
-          const data = new FormData();
-          data.append("file", file);
-
-          for (const [key, value] of data.entries()) {
-            console.log(`${key}:`, value);
-          }
-
-          // 이미지 업로드 API 호출
-          const url = await fileUploadRequest(data); // 이미지 업로드 함수
+          const accessToken = cookies.accessToken;
+          const url = await uploadImage(file, accessToken);
           
-  
           if (url) {
-            boardImageList.push(url);
-  
-            // Quill 에디터에 이미지 URL 삽입
             const quillEditor = quillRef.current.getEditor();
-            const range = quillEditor.getSelection();
-            if (range) {
-              quillEditor.insertEmbed(range.index, "image", url); // 이미지 URL 삽입
-            } else {
-              console.error("Selection error"); // 선택 범위가 없으면 에러 출력
+            const range = quillEditor.getSelection(true);
+            
+            // 이미지 URL을 그대로 사용
+            quillEditor.insertEmbed(range.index, 'image', url);
+            
+            // 이미지 삽입 후 스타일 추가
+            const image = quillEditor.root.querySelector(`img[src="${url}"]`);
+            if (image) {
+              image.style.maxWidth = '100%';
+              image.style.height = 'auto';
             }
+
+            setUploadedUrls(prev => [...prev, url]);
           }
         } catch (error) {
-          console.error("Image upload failed:", error);
+          console.error('이미지 업로드 실패:', error);
+          alert('이미지 업로드에 실패했습니다.');
         }
       }
     };
-  };
 
-   // Quill 에디터에 대한 설정 (툴바에 이미지를 삽입할 수 있도록 설정)
-   useEffect(() => {
-    const quill = quillRef.current.getEditor();
-    const toolbar = quill.getModule('toolbar');
-    toolbar.addHandler('image', imageHandler); // 툴바에서 이미지 버튼 클릭 시 imageHandler 호출
-  }, []);
+    input.click();
+  }, [cookies.accessToken]);
+
+  // 그 다음 modules 정의
+  const modules = useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        ["image"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ align: [] }],
+        ["clean"],
+      ],
+      handlers: {
+        image: imageHandler,
+      },
+    },
+  }), [imageHandler]);
 
   // 게시글 API 응답 처리
   const postBoardResponse = (responseBody) => {
@@ -90,8 +83,8 @@ export default function BoardWrite() {
     alert('글쓰기 성공!');
     resetBoard();
     setTitle('');
-    setCategory(''); // 카테고리 초기화
-    setContent(''); // 내용 초기화
+    setCategory('');
+    setContent('');
 
     const quillEditor = quillRef.current.getEditor();
     quillEditor.setText(''); // 에디터 내용 비우기
@@ -100,30 +93,29 @@ export default function BoardWrite() {
 
   // 게시글 업로드 버튼 클릭 시
   const onSubmitButtonClickHandler = async () => {
-    console.log("업로드 버튼 클릭됨");
-
-    if (!title || !content || !category) {
-      alert("제목, 내용, 카테고리는 필수입니다.");
-      return;
-    }
-    const accessToken = cookies.accessToken;
-    console.log(accessToken);
-    if (!accessToken) return;
-
-    const requestBody = {
-      title,
-      content,
-      category,
-      boardImageList,
-    };
-
     try {
-      console.log(requestBody);
-      const response = await postBoardRequest(requestBody, accessToken); // 게시글 API 요청
-      postBoardResponse(response); // 응답 처리
-      resetBoard();
+      const accessToken = cookies.accessToken;
+
+      const requestBody = {
+        title,
+        content,
+        category,
+        boardImageList: uploadedUrls // 저장된 URL 목록 사용
+      };
+      
+      const response = await postBoardRequest(requestBody, accessToken);
+      postBoardResponse(response);
+      console.log(response);
+      
+      if (response.message === 'Success') {
+        alert('게시글이 작성되었습니다.');
+        navigate('/');
+      } else {
+        alert('게시글 작성에 실패했습니다1.');
+      }
+
     } catch (error) {
-      console.error("Error posting board:", error);
+      alert('게시글 작성에 실패했습니다2.');
     }
   };
 
@@ -137,6 +129,10 @@ export default function BoardWrite() {
     resetBoard();
   }, [cookies, navigate, resetBoard]);
 
+
+  useEffect(()=>{
+    console.log(content)
+  },[ content])
 
   return (
     <div>
@@ -155,22 +151,20 @@ export default function BoardWrite() {
 
           {/* ======== Subject ======== */}
           <div className="flex gap-4">
-          <input
-            className="Subject"
-            placeholder="제목을 입력해 주세요"
-            style={{
-              padding: "7px",
-              marginBottom: "10px",
-              width: "100%",
-              border: "1px solid lightGray",
-              fontSize: "15px",
-            }}
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
-          <select
+            <input
+              className="Subject"
+              placeholder="제목을 입력해 주세요"
+              style={{
+                padding: "7px",
+                marginBottom: "10px",
+                width: "100%",
+                border: "1px solid lightGray",
+                fontSize: "15px",
+              }}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <select
               className="Category"
               style={{
                 padding: "7px",
@@ -184,9 +178,8 @@ export default function BoardWrite() {
             >
               <option value={null}>카테고리 선택</option>
               <option value="Professor">Professor</option>
-              <option value="Student">Student</option>
+              <option value="Notice">Notice</option>
               <option value="Research">Research</option>
-              {/* 추가 카테고리 옵션을 여기에 넣을 수 있습니다. */}
             </select>
           </div>
 
@@ -196,9 +189,7 @@ export default function BoardWrite() {
               ref={quillRef}
               modules={modules}
               placeholder="내용을 입력해 주세요"
-              onChange={(value) => {
-                setContent(value);
-              }}
+              onChange={(value) => setContent(value)}
               style={{ height: "600px" }}
             />
           </div>

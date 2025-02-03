@@ -35,3 +35,35 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+# 환경 변수
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# 보안 설정
+application-secret.properties
+application-dev.properties
+application-prod.properties
+
+# 빌드 결과물
+/target/
+/build/
+/node_modules/
+
+# IDE 설정
+.idea/
+*.iml
+.vscode/
+
+# 로그 파일
+*.log
+logs/
+
+# 기타 민감한 파일들
+*.pem
+*.key
+*.p12

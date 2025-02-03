@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.immunologyHomepage.entity.BoardListViewEntity;
+import com.immunologyHomepage.entity.BoardEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class BoardListItem {
     private String content;
     private String titleImage;
     private int viewCount;
-    private String writeDatetime;
+    private String writeDateTime;
     private String writerNickname; 
     private String category;   
 
@@ -30,17 +31,34 @@ public class BoardListItem {
         this.content = boardListViewEntity.getContent();
         this.titleImage = boardListViewEntity.getTitleImage();
         this.viewCount = boardListViewEntity.getViewCount();
-        this.writeDatetime = boardListViewEntity.getWriteDatetime();
+        this.writeDateTime = boardListViewEntity.getWriteDateTime();
         this.writerNickname = boardListViewEntity.getWriterNickname();
     }
 
-    public static List<BoardListItem> getList(List<BoardListViewEntity> boardListViewEntities){
+    public BoardListItem(BoardEntity boardEntity) {
+        this.boardNumber = boardEntity.getBoardNumber();
+        this.title = boardEntity.getTitle();
+        this.content = boardEntity.getContent();
+        this.writeDateTime = boardEntity.getWriteDateTime();
+        this.writerNickname = boardEntity.getWriterNickname();
+    }
+
+    public static List<BoardListItem> getListFromViewEntity(List<BoardListViewEntity> boardListViewEntities){
         List<BoardListItem> list = new ArrayList<>();
         for(BoardListViewEntity boardListViewEntity:boardListViewEntities){
             BoardListItem boardListItem = new BoardListItem(boardListViewEntity);
             list.add(boardListItem);
         }
 
+        return list;
+    }
+
+    public static List<BoardListItem> getListFromEntity(List<BoardEntity> boardEntities) {
+        List<BoardListItem> list = new ArrayList<>();
+        for(BoardEntity boardEntity : boardEntities) {
+            BoardListItem boardListItem = new BoardListItem(boardEntity);
+            list.add(boardListItem);
+        }
         return list;
     }
 }

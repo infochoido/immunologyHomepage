@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 import com.immunologyHomepage.dto.request.auth.SignUpRequestDto;
 import com.immunologyHomepage.dto.request.auth.SignInRequestDto;
@@ -35,10 +36,17 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     public ResponseEntity<? super SignInResponseDto> signIn(
-        @RequestBody @Valid SignInRequestDto requestBody){
-            System.out.println("sign-in endpoint called");
+        @RequestBody @Valid SignInRequestDto requestBody) {
+        try {
+            System.out.println("Sign-in request received for user: " + requestBody.getUserName());
             ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
+            System.out.println("Sign-in response: " + response.getStatusCode());
             return response;
+        } catch (Exception e) {
+            System.err.println("Error in sign-in: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
     
     }

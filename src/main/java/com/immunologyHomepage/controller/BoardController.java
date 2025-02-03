@@ -1,60 +1,63 @@
 package com.immunologyHomepage.controller;
 
-import java.util.List;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-// import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.immunologyHomepage.dto.request.board.postBoardRequestDto;
-import com.immunologyHomepage.dto.response.board.PostBoardResponseDto;
+import com.immunologyHomepage.dto.request.board.PutBoardRequestDto;
+import com.immunologyHomepage.dto.response.board.*;
+import com.immunologyHomepage.service.BoardService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import com.immunologyHomepage.service.BoardService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.immunologyHomepage.dto.response.board.GetBoardCategoryResponseDto;
-import com.immunologyHomepage.dto.response.board.GetBoardResonseDto;
-
 
 @RestController
 @RequestMapping("/api/v1/board")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class BoardController {
-
+    
     private final BoardService boardService;
 
-     @GetMapping("/category")
+    @GetMapping("/category")
     public ResponseEntity<? super GetBoardCategoryResponseDto> getCategoryBoardList(
         @RequestParam("category") String category) {
-            // 서비스에서 카테고리별 게시글을 가져오는 메서드 호출
-            return boardService.getCategoryBoardList(category);
+        return boardService.getCategoryBoardList(category);
     }
     
-
     @GetMapping("/{boardNumber}")
-    public ResponseEntity<? super GetBoardResonseDto>getBoard(
-        @PathVariable("boardNumber") Integer boardNumber){
-            ResponseEntity<? super GetBoardResonseDto> response = boardService.getBoard(boardNumber);
-            return response;
-        }
+    public ResponseEntity<? super GetBoardResonseDto> getBoard(
+        @PathVariable("boardNumber") Integer boardNumber) {
+        return boardService.getBoard(boardNumber);
+    }
     
-
     @PostMapping("")
     public ResponseEntity<? super PostBoardResponseDto> postBoard(
         @RequestBody @Valid postBoardRequestDto requestBody,
         @AuthenticationPrincipal String userName
-    ){
-        ResponseEntity<? super PostBoardResponseDto> response =  boardService.postBoard(requestBody, userName);
-        return response;
+    ) {
+        return boardService.postBoard(requestBody, userName);
     }
     
+    @RequestMapping(value = "/{boardNumber}", method = RequestMethod.DELETE)
+    public ResponseEntity<? super DeleteBoardResponseDto> deleteBoard(
+        @PathVariable("boardNumber") Integer boardNumber,
+        @AuthenticationPrincipal String userName
+    ) {
+        System.out.println("Delete request received - boardNumber: " + boardNumber);
+        System.out.println("User: " + userName);
+        return boardService.deleteBoard(boardNumber, userName);
+    }
+    
+    @PutMapping("/{boardNumber}")
+    public ResponseEntity<? super PutBoardResponseDto> putBoard(
+        @PathVariable("boardNumber") Integer boardNumber,
+        @RequestBody @Valid PutBoardRequestDto requestBody,
+        @AuthenticationPrincipal String userName
+    ) {
+        return boardService.putBoard(boardNumber, requestBody, userName);
+    }
 }
 

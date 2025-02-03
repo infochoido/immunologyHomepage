@@ -1,36 +1,41 @@
 import React, { useEffect, useState } from "react";
-import PageTitle from "../components/PageTitle";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import PageTitle from "../components/PageTitle";
+import { getBoardByCategory } from "../apis";
 
 export default function Research() {
-  const [data, setData] = useState([]); // 서버에서 가져온 데이터를 저장
-  const ITEMS_PER_PAGE = 10; // 한 번에 보여줄 데이터 개수
-  const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE); // 현재 표시할 데이터 개수
+  const [data, setData] = useState([]); // 데이터 초기 상태를 null로 설정
+
+
+  const ITEMS_PER_PAGE = 10;
+  const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
 
   useEffect(() => {
-    // 서버에서 데이터 가져오기
-    axios
-      .get("http://13.125.255.131:8080/api/v1/board/category?category=research")
-      .then((res) => {
-        // 응답 데이터에서 title, viewCount, writeDatetime만 추출
-        const formattedData = res.data.categoryList.map((item) => ({
-          board_number:item.boardNumber,
-          title: item.title,
-          viewCount: item.viewCount,
-          writeDatetime: item.writeDatetime,
-        }));
-        setData(formattedData); // 추출한 데이터를 상태에 저장
-      })
-      .catch((error) => {
-        console.error("데이터를 가져오는 중 오류 발생:", error);
-      });
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await getBoardByCategory("Research");
+        
 
+        if (response) { 
+          const formattedData = response.categoryList.map((item) => ({
+            board_number: item.boardNumber,
+            title: item.title,
+            viewCount: item.viewCount,
+            writeDatetime: item.writeDatetime,
+          }));
+          setData(formattedData); // 데이터 업데이트
+        }
+
+      } catch (error) {
+      }
+    };
+    fetchData();
+  }, []); // 빈 배열로 의존성 배열을 설정하여 한 번만 실행되게 설정
   // 더보기 버튼 클릭 시 표시 데이터를 증가시킴
   const handleLoadMore = () => {
     setVisibleItems((prev) => prev + ITEMS_PER_PAGE);
   };
+
 
   return (
     <div>
@@ -45,31 +50,31 @@ export default function Research() {
             </tr>
           </thead>
           <tbody>
-            {data.slice(0, visibleItems).map((item, index) => (
-              <tr key={index}>
-                <td className="px-2 text-left hover:bg-gray-100">
-                <Link
-                  className="cursor-pointer hover:underline"
-                  to={{
-                    pathname: "/boardDetail",
-                    search: `?board_number=${item.board_number}`, // 쿼리 문자열 추가
-                    state: {
-                      title: item.title,
-                      datetime: item.writeDatetime,
-                      view_count: item.viewCount,
-                    },
-                  }}
-                >
-                  {item.title}
-                </Link>
+            {data && data.length > 0 ? (
+              data.slice(0, visibleItems).map((item, index) => (
+                <tr key={index}>
+                  <td className="px-2 text-left hover:bg-gray-100">
+                    <Link
+                      className="cursor-pointer hover:underline"
+                      to={`/boardDetail?board_number=${item.board_number}`}
+                    >
+                      {item.title}
+                    </Link>
+                  </td>
+                  <td className="px-2 text-right w-16">{item.writeDatetime}</td>
+                  <td className="px-2 text-right w-2">{item.viewCount}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className="text-center py-4">
+                  게시글이 없습니다.
                 </td>
-                <td className="px-2 text-right w-16">{item.writeDatetime}</td>
-                <td className="px-2 text-right w-2">{item.viewCount}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
-        {visibleItems < data.length && (
+        {data.length > visibleItems && (
           <div className="text-center my-4">
             <button
               className="mt-4 mb-16 btn bg-white text-black border border-gray-500 hover:bg-gray-100 rounded-lg"

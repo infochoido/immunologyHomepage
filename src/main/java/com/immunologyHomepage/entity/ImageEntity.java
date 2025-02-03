@@ -1,29 +1,35 @@
 package com.immunologyHomepage.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Getter
+@Entity(name = "image")
+@Table(name = "image")
 @NoArgsConstructor
-@AllArgsConstructor
-@Entity(name="image")
-@Table(name="image")
+@Getter
 public class ImageEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer sequence;
     
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int sequence;
-    private int boardNumber;
+    @Column(nullable = false)
     private String image;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_number")
+    private BoardEntity board;
 
-    public ImageEntity(int boardNumber, String image){
-        this.boardNumber = boardNumber;
+    public ImageEntity(String image) {
         this.image = image;
     }
-    
+
+    public void setBoard(BoardEntity board) {
+        this.board = board;
+    }
 }

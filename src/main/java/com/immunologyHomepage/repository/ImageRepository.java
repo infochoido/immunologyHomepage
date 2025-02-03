@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.immunologyHomepage.entity.ImageEntity;
 
 @Repository
-public interface ImageRepository  extends JpaRepository<ImageEntity, Integer>{
-    List<ImageEntity> findByBoardNumber(Integer boardNumber);
+public interface ImageRepository extends JpaRepository<ImageEntity, Integer> {
+    List<ImageEntity> findByBoard_BoardNumber(Integer boardNumber);
+    void deleteByBoard_BoardNumber(Integer boardNumber);
 }
