@@ -24,23 +24,28 @@ export default function BoardWrite() {
       if (file) {
         try {
           const accessToken = cookies.accessToken;
-          const url = await uploadImage(file, accessToken);
+          const imageUrl = await uploadImage(file, accessToken);
           
-          if (url) {
+          if (imageUrl) {
             const quillEditor = quillRef.current.getEditor();
             const range = quillEditor.getSelection(true);
             
-            // 이미지 URL을 그대로 사용
-            quillEditor.insertEmbed(range.index, 'image', url);
+            // URL 중복 제거
+            const cleanUrl = imageUrl.replace('http://localhost:8080', '');
+            const fullUrl = `http://localhost:8080${cleanUrl}`;
+            
+            console.log('최종 이미지 URL:', fullUrl); // URL 확인용
+            
+            quillEditor.insertEmbed(range.index, 'image', fullUrl);
             
             // 이미지 삽입 후 스타일 추가
-            const image = quillEditor.root.querySelector(`img[src="${url}"]`);
+            const image = quillEditor.root.querySelector(`img[src="${fullUrl}"]`);
             if (image) {
               image.style.maxWidth = '100%';
               image.style.height = 'auto';
             }
-
-            setUploadedUrls(prev => [...prev, url]);
+            
+            setUploadedUrls(prev => [...prev, fullUrl]);
           }
         } catch (error) {
           console.error('이미지 업로드 실패:', error);

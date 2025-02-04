@@ -59,7 +59,7 @@ public class FileController {
     }
 
     @GetMapping("/images/{fileName}")
-    public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
+    public ResponseEntity<Resource> getImage(@PathVariable("fileName") String fileName) {
         try {
             Resource resource = fileService.loadFileAsResource(fileName);
             return ResponseEntity.ok()

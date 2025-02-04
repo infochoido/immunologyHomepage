@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,9 +34,9 @@ public class FileServiceImplement implements FileService {
             if (!directory.exists()) {
                 directory.mkdirs();
             }
-            System.out.println("Upload directory created at: " + directory.getAbsolutePath());
+            System.out.println("Storage location: " + directory.getAbsolutePath());
         } catch (Exception e) {
-            throw new RuntimeException("Could not create upload folder!");
+            throw new RuntimeException("Could not create upload directory!");
         }
     }
 
@@ -51,10 +52,10 @@ public class FileServiceImplement implements FileService {
             String uuid = UUID.randomUUID().toString();
             String saveFileName = uuid + extension;
             
-            File targetFile = new File(filePath + File.separator + saveFileName);
-            file.transferTo(targetFile);
+            Path targetPath = Paths.get(filePath).resolve(saveFileName);
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
             
-            System.out.println("File saved at: " + targetFile.getAbsolutePath());
+            System.out.println("File saved at: " + targetPath.toAbsolutePath());
             return saveFileName;
             
         } catch (Exception e) {
@@ -84,18 +85,16 @@ public class FileServiceImplement implements FileService {
     @Override
     public Resource loadFileAsResource(String fileName) {
         try {
-            Path path = Paths.get(filePath + fileName);
-            Resource resource = new UrlResource(path.toUri());
+            Path filePath = Paths.get(this.filePath).resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
             
             if (resource.exists()) {
                 return resource;
+            } else {
+                throw new RuntimeException("File not found: " + fileName);
             }
-            System.out.println("파일을 찾을 수 없음: " + fileName);
-            return null;
         } catch (Exception e) {
-            System.err.println("파일 로드 중 오류 발생: " + e.getMessage());
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("File not found: " + fileName, e);
         }
     }
 }
