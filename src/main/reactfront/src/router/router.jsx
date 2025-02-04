@@ -9,10 +9,12 @@ import Project from "../pages/Project";
 import Notice from "../pages/Notice";
 import BoardWrite from "../pages/BoardWrite";
 import BoardDetail from "../pages/BoardDetail";
+import CoverSelection from "../pages/CoverSelection";
 import { useCookies } from "react-cookie";
 
 function ProtectedRoute({ element }) {
   const [cookie] = useCookies();
+
 
   if (!cookie.accessToken) {
     return <Navigate to="/" />;
@@ -35,9 +37,11 @@ export default function RouterComponent() {
           <Route path="research/project" element={<Project />} />
           <Route path="notice" element={<Notice />} />
           <Route path="boardDetail" element={<BoardDetail />} />
+          <Route path="publication/cover-selection" element={<CoverSelection />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>
+
     </Router>
   );
 }

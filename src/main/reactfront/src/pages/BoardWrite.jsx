@@ -13,6 +13,10 @@ export default function BoardWrite() {
   const { title, setTitle, content, boardImageList, setBoardImageList, category, setCategory, setContent, resetBoard } = useBoardStore();
   const { loginUser, setLoginUser, resetLoginUser } = useLoginuserStore();
   const [uploadedUrls, setUploadedUrls] = useState([]); // 업로드된 이미지 URL 저장
+  const [memberName, setMemberName] = useState('');
+  const [memberEmail, setMemberEmail] = useState('');
+  const [memberDegree, setMemberDegree] = useState('');
+  const [memberImage, setMemberImage] = useState('');
 
   const imageHandler = useCallback(() => {
     const input = document.createElement('input');
@@ -100,27 +104,47 @@ export default function BoardWrite() {
   const onSubmitButtonClickHandler = async () => {
     try {
       const accessToken = cookies.accessToken;
+      let finalContent = content;
+
+      if (category === 'Members') {
+        // 필수 필드 검증
+        if (!memberName || !memberEmail || !memberDegree || !uploadedUrls[0]) {
+          alert('모든 필드를 입력해주세요.');
+          return;
+        }
+
+        finalContent = JSON.stringify({
+          name: memberName,
+          email: memberEmail,
+          degree: memberDegree,
+          image: uploadedUrls[0]
+        });
+      }
 
       const requestBody = {
         title,
-        content,
+        content: finalContent,
         category,
-        boardImageList: uploadedUrls // 저장된 URL 목록 사용
+        boardImageList: uploadedUrls
       };
       
       const response = await postBoardRequest(requestBody, accessToken);
-      postBoardResponse(response);
-      console.log(response);
       
-      if (response.message === 'Success') {
+      if (response.code === 'SU') {  // 성공 코드 확인
         alert('게시글이 작성되었습니다.');
-        navigate('/');
+        if (category === 'Members') {
+          navigate('/members');  // Members 카테고리일 경우 members 페이지로 이동
+        } else {
+          navigate('/');
+        }
+        resetBoard();
       } else {
-        alert('게시글 작성에 실패했습니다1.');
+        alert('게시글 작성에 실패했습니다.');
       }
 
     } catch (error) {
-      alert('게시글 작성에 실패했습니다2.');
+      console.error('게시글 작성 중 오류 발생:', error);
+      alert('게시글 작성에 실패했습니다.');
     }
   };
 
@@ -134,6 +158,11 @@ export default function BoardWrite() {
     resetBoard();
   }, [cookies, navigate, resetBoard]);
 
+  useEffect(() => {
+    if (category === 'Members') {
+      setTitle('Members'); // Members 카테고리 선택시 자동으로 제목 설정
+    }
+  }, [category]);
 
   useEffect(()=>{
     console.log(content)
@@ -179,25 +208,72 @@ export default function BoardWrite() {
                 fontSize: "15px",
               }}
               value={category}
-              onChange={(e) => setCategory(e.target.value)} // 카테고리 값 설정
+              onChange={(e) => setCategory(e.target.value)}
             >
               <option value={null}>카테고리 선택</option>
               <option value="Professor">Professor</option>
               <option value="Notice">Notice</option>
               <option value="Research">Research</option>
+              <option value="Members">Members</option>
+              <option value="Project">Project</option>
+              <option value="CoverSelection">CoverSelection</option>
             </select>
           </div>
 
-          <div style={{ height: "650px" }}>
-            {/* ======== Quill ======== */}
-            <ReactQuill
-              ref={quillRef}
-              modules={modules}
-              placeholder="내용을 입력해 주세요"
-              onChange={(value) => setContent(value)}
-              style={{ height: "600px" }}
-            />
-          </div>
+          {category === 'Members' ? (
+            <div className="member-inputs space-y-4">
+              <div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      try {
+                        const imageUrl = await uploadImage(file, cookies.accessToken);
+                        setMemberImage(imageUrl);
+                        setUploadedUrls([imageUrl]);
+                      } catch (error) {
+                        console.error('이미지 업로드 실패:', error);
+                      }
+                    }
+                  }}
+                />
+              </div>
+              <input
+                className="w-full p-2 border rounded"
+                placeholder="이름"
+                value={memberName}
+                onChange={(e) => setMemberName(e.target.value)}
+              />
+              <input
+                className="w-full p-2 border rounded"
+                placeholder="이메일"
+                value={memberEmail}
+                onChange={(e) => setMemberEmail(e.target.value)}
+              />
+              <select
+                className="w-full p-2 border rounded"
+                value={memberDegree}
+                onChange={(e) => setMemberDegree(e.target.value)}
+              >
+                <option value="">학위 선택</option>
+                <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
+                <option value="Master Students">Master Students</option>
+                <option value="Ph.D. Students">Ph.D. Students</option>
+              </select>
+            </div>
+          ) : (
+            <div style={{ height: "650px" }}>
+              <ReactQuill
+                ref={quillRef}
+                modules={modules}
+                placeholder="내용을 입력해 주세요"
+                onChange={(value) => setContent(value)}
+                style={{ height: "600px" }}
+              />
+            </div>
+          )}
 
           {/* ======== Button ======== */}
           <div style={{ float: "right" }}>

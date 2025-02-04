@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import PageTitle from "../components/PageTitle";
 import { getBoardByCategory } from "../apis";
 
-export default function Project() {
+export default function CoverSelection() {
   const [data, setData] = useState([]); // 데이터 초기 상태를 null로 설정
+
+
 
   const ITEMS_PER_PAGE = 10;
   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
@@ -12,7 +14,7 @@ export default function Project() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getBoardByCategory("Project");
+        const response = await getBoardByCategory("CoverSelection");
         
 
         if (response) { 
