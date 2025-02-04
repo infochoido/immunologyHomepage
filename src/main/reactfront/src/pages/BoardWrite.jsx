@@ -35,9 +35,10 @@ export default function BoardWrite() {
             const range = quillEditor.getSelection(true);
             
             // URL 중복 제거
-            const cleanUrl = imageUrl.replace('http://52.79.173.199:8080/', '');
-            const fullUrl = `http://52.79.173.199:8080/${cleanUrl}`;
+            const cleanUrl = imageUrl.replace('https://15.164.244.242/', '');
+            const fullUrl = `https://15.164.244.242/${cleanUrl}`;
             
+
             console.log('최종 이미지 URL:', fullUrl); // URL 확인용
             
             quillEditor.insertEmbed(range.index, 'image', fullUrl);
