@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import ReactQuill, { Quill } from "react-quill-new";
 import 'react-quill-new/dist/quill.snow.css'; // quill의 기본 스타일
-import { postBoardRequest, uploadImage, uploadFileRequest } from "../apis";
+import { postBoardRequest, uploadImage, uploadFileRequest, getImageUrl } from "../apis";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useBoardStore, useLoginuserStore } from "../stores/store";
@@ -34,12 +34,10 @@ export default function BoardWrite() {
             const quillEditor = quillRef.current.getEditor();
             const range = quillEditor.getSelection(true);
             
-            // URL 중복 제거
-            const cleanUrl = imageUrl.replace('https://15.164.244.242/', '');
-            const fullUrl = `https://15.164.244.242/${cleanUrl}`;
+            // URL 처리 수정
+            const fullUrl = getImageUrl(imageUrl);
             
-
-            console.log('최종 이미지 URL:', fullUrl); // URL 확인용
+            console.log('최종 이미지 URL:', fullUrl);
             
             quillEditor.insertEmbed(range.index, 'image', fullUrl);
             
