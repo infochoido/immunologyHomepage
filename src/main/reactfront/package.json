@@ -26,7 +26,7 @@
     "swiper": "^11.2.1",
     "zustand": "^5.0.3"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://52.79.173.199:8080/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

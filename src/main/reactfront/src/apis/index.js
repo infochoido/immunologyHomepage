@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const BASE_URL = 'http://52.79.173.199:8080';
+
 const instance = axios.create({
-    baseURL: 'http://localhost:8080',
-    timeout: 10000,  // 10초
+    baseURL: BASE_URL,
+    timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -113,23 +115,23 @@ export const getBoardDetail = async(boardNumber) => {
 }
 
 // 이미지 업로드 함수 수정
-export const uploadImage = async (file, accessToken) => {
+export const uploadImage = async (file) => {
     try {
         const formData = new FormData();
         formData.append('file', file);
-        
-        const response = await instance.post('/api/v1/upload', formData, {
+
+        const response = await axios.post(`${BASE_URL}/api/v1/upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${accessToken}`
-            }
+            },
+            withCredentials: true,
         });
         
         console.log('이미지 업로드 응답:', response);
         
         if (response.data && response.data.url) {
             // 전체 URL로 변환
-            return `http://localhost:8080${response.data.url}`;
+            return `${BASE_URL}${response.data.url}`;
         } else {
             throw new Error('이미지 URL을 받지 못했습니다.');
         }
