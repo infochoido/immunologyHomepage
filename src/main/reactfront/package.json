@@ -13,6 +13,7 @@
     "bootstrap": "^5.3.3",
     "cra-template": "1.2.0",
     "flowbite": "^2.5.2",
+    "quill-image-resize": "^3.0.9",
     "quill-resize-image": "^1.0.5",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
@@ -26,7 +27,7 @@
     "swiper": "^11.2.1",
     "zustand": "^5.0.3"
   },
-  "proxy": "http://52.79.173.199:8080/",
+  "proxy": "https://jbnuvetmedimmunelab.store/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

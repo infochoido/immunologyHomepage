@@ -5,6 +5,10 @@ import { postBoardRequest, uploadImage, uploadFileRequest, getImageUrl } from ".
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useBoardStore, useLoginuserStore } from "../stores/store";
+import ImageResize from 'quill-image-resize';
+
+// Quill에 ImageResize 모듈 등록
+Quill.register('modules/imageResize', ImageResize);
 
 export default function BoardWrite() {
   const quillRef = useRef();
@@ -34,18 +38,20 @@ export default function BoardWrite() {
             const quillEditor = quillRef.current.getEditor();
             const range = quillEditor.getSelection(true);
             
-            // URL 처리 수정
+            // 이미지 삽입 시 크기 조절 가능하도록 설정
             const fullUrl = getImageUrl(imageUrl);
-            
-            console.log('최종 이미지 URL:', fullUrl);
-            
             quillEditor.insertEmbed(range.index, 'image', fullUrl);
             
-            // 이미지 삽입 후 스타일 추가
+            // 이미지 선택 및 크기 조절 가능하도록 설정
             const image = quillEditor.root.querySelector(`img[src="${fullUrl}"]`);
             if (image) {
               image.style.maxWidth = '100%';
               image.style.height = 'auto';
+              image.setAttribute('data-align', 'center');  // 기본 중앙 정렬
+              
+              // 이미지 크기 조절 핸들러 추가
+              image.setAttribute('contenteditable', 'false');
+              image.setAttribute('resizable', 'true');
             }
             
             setUploadedUrls(prev => [...prev, fullUrl]);
@@ -60,22 +66,43 @@ export default function BoardWrite() {
     input.click();
   }, [cookies.accessToken]);
 
-  // 그 다음 modules 정의
+  // modules 정의 수정
   const modules = useMemo(() => ({
     toolbar: {
       container: [
         [{ header: [1, 2, 3, false] }],
         ["bold", "italic", "underline", "strike"],
-        ["image"],
+        ["blockquote", "code-block"],
         [{ list: "ordered" }, { list: "bullet" }],
         [{ align: [] }],
-        ["clean"],
+        ["link", "image"],  // 링크 추가
+        [{ size: ["small", false, "large", "huge"] }],  // 텍스트 크기
+        ["clean"]
       ],
       handlers: {
         image: imageHandler,
-      },
+      }
     },
+    imageResize: {
+      displaySize: true,
+      modules: ['Resize', 'DisplaySize']
+    },
+    clipboard: {
+      matchVisual: false
+    }
   }), [imageHandler]);
+
+  // 스타일 추가
+  const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'blockquote', 'code-block',
+    'list', 'bullet',
+    'align',
+    'link', 'image',
+    'size',
+    'clean'
+  ];
 
   // 게시글 API 응답 처리
   const postBoardResponse = (responseBody) => {
@@ -116,7 +143,7 @@ export default function BoardWrite() {
           name: memberName,
           email: memberEmail,
           degree: memberDegree,
-          image: uploadedUrls[0]
+          image: `/api/v1/images/${uploadedUrls[0]}`  // 전체 경로로 수정
         });
       }
 
@@ -163,9 +190,6 @@ export default function BoardWrite() {
     }
   }, [category]);
 
-  useEffect(()=>{
-    console.log(content)
-  },[ content])
 
   return (
     <div>
@@ -267,6 +291,7 @@ export default function BoardWrite() {
               <ReactQuill
                 ref={quillRef}
                 modules={modules}
+                formats={formats}
                 placeholder="내용을 입력해 주세요"
                 onChange={(value) => setContent(value)}
                 style={{ height: "600px" }}

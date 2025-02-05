@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = '';  // 빈 문자열로 설정하여 상대 경로 사용
+const BASE_URL = 'https://jbnuvetmedimmunelab.store';  // 빈 문자열로 설정하여 상대 경로 사용
 
 const instance = axios.create({
     baseURL: '',
@@ -11,7 +11,7 @@ const instance = axios.create({
     withCredentials: true
 });
 
-const API_DOMAIN = `/api/v1`;
+const API_DOMAIN = `${BASE_URL}/api/v1`;
 
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
 
