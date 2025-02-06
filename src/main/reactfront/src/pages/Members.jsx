@@ -69,7 +69,7 @@ export default function Members() {
   return (
     <div>
       <PageTitle/>
-      <div className="min-h-screen py-8 px-4 max-w-6xl mx-auto">
+      <div className="min-h-screen py-8 px-4 max-w-6xl">
         <div className="space-y-6">
           {members.map((member) => (
             <div

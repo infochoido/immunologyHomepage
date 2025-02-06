@@ -7,10 +7,10 @@ import DetailPageGuide from "../components/DetailPageGuide";
 
 // 메뉴 데이터 정의
 const menuItems = [
-  { text: "Professor", link: "/professor",
-    subItems: [
-      { text: "Professor", link: "/professor" },
-    ],
+  {
+    text: "Professor",
+    link: "/professor",
+    subItems: [{ text: "Professor", link: "/professor" }],
   },
   {
     text: "Members",
@@ -36,55 +36,70 @@ const menuItems = [
       { text: "Refereed Journal", link: "/publication/refereed-journal" },
     ],
   },
-  { text: "Patent", link: "/patent",
-    subItems: [
-      { text: "Patent", link: "/patent" },
-    ],
+  {
+    text: "Patent",
+    link: "/patent",
+    subItems: [{ text: "Patent", link: "/patent" }],
   },
-  { text: "Notice", link: "/notice",
-    subItems: [
-      { text: "Notice", link: "/notice" },
-    ],
+  {
+    text: "Notice",
+    link: "/notice",
+    subItems: [{ text: "Notice", link: "/notice" }],
   },
-  { text: "BoardDetail", link: "/boardDetail",
-    subItems: [
-      { text: "BoardDetail", link: "/boardDetail" },
-    ],
+  {
+    text: "BoardDetail",
+    link: "/boardDetail",
+    subItems: [{ text: "BoardDetail", link: "/boardDetail" }],
   },
 ];
 
 export default function Layout() {
   const location = useLocation();
+  const showSidebar = location.pathname !== "/";
 
-  const showSidebar = location.pathname !== "/"; // 홈 제외
-
-  // 현재 경로에 해당하는 메뉴 항목 찾기
   const currentMenu = menuItems.find(
     (menu) =>
       (menu.link && location.pathname.startsWith(menu.link)) ||
-      (menu.subItems && menu.subItems.some((sub) => location.pathname.startsWith(sub.link)))
+      (menu.subItems &&
+        menu.subItems.some((sub) => location.pathname.startsWith(sub.link)))
   );
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <header className="sticky top-0 z-50 bg-white shadow-sm">
         <TopBanner />
         <NavBar />
       </header>
 
       {showSidebar && <DetailPageGuide />}
 
-      <div className={`${showSidebar ? "custom-mb:mx-36 mx-0" : "w-full"} flex flex-1`}>
+      <div
+        className={`flex-1 ${
+          showSidebar
+            ? " px-4 py-6 flex gap-8 custom-mb:mx-[100px]"
+            : "w-full"
+        }`}
+      >
         {showSidebar && currentMenu && (
-          <aside className="w-[250px] px-4 custom-mb:block hidden">
-            <SideBar title={currentMenu.text} subMenuItems={currentMenu.subItems || []} />
+          <aside className="w-64 flex-shrink-0 custom-mb:block hidden ">
+            <div className="sticky top-24">
+              <SideBar
+                title={currentMenu.text}
+                subMenuItems={currentMenu.subItems || []}
+              />
+            </div>
           </aside>
         )}
-        <main className={`${showSidebar ? "w-4/5 min-w-[768px]" : "w-full"}`}>
+        <main
+          className={`${
+            showSidebar ? "w-full" : "w-full"
+          } bg-white rounded-lg shadow-sm`}
+        >
           <Outlet />
         </main>
       </div>
-      <footer className="text-white">
+
+      <footer className="bg-gray-800 text-white mt-auto">
         <Footer />
       </footer>
     </div>

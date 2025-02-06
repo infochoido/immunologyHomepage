@@ -119,12 +119,16 @@ export default function NavBar() {
           onClose={() => setIsOpen(false)}
           sx={{
             "& .MuiDrawer-paper": {
-              backgroundColor: "#023793", // Drawer 배경색을 파랑으로 변경
-              color: "white", // 글씨 색상은 흰색으로 변경
+              backgroundColor: "#023793",
+              color: "white",
+              width: {
+                xs: '70%', // 모바일 환경
+                sm: '400px' // 태블릿/데스크톱 환경
+              }
             },
           }}
         >
-          <div style={{ width: 400, padding: "10px" }}>
+          <div style={{ padding: "10px" }}>
             <List>
               {menuItems.map((item, index) => (
                 <div key={index}>

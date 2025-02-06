@@ -14,19 +14,18 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Integer>{
     BoardEntity findByBoardNumber(Integer boardNumber);
 
     @Query(
-        value=
-        "SELECT " + 
-        "B.board_number AS board_number, "+
+        value = 
+        "SELECT " +
+        "B.board_number AS boardNumber, " +
         "B.title AS title, " +
-        "B.content AS content, "+
-        "B.write_date_time AS write_date_time, "+
-        "B.writer_nickname AS writer_nickname, "+
-        "U.nickname AS nickname " +
-        "FROM board B "+
-        "INNER JOIN \"user\" U "+
-        "ON B.writer_nickname = U.nickname "+
-        "WHERE board_number = ?1",
-        nativeQuery=true
+        "B.content AS content, " +
+        "B.write_date_time AS writeDateTime, " +
+        "U.nickname AS writerNickname " +
+        "FROM board AS B " +
+        "INNER JOIN user AS U " +
+        "ON B.writer_email = U.email " +
+        "WHERE B.board_number = ?1",
+        nativeQuery = true
     )
     GetBoardResultSet getBoard(Integer boardNumber);
 

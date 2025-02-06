@@ -10,7 +10,12 @@ import Notice from "../pages/Notice";
 import BoardWrite from "../pages/BoardWrite";
 import BoardDetail from "../pages/BoardDetail";
 import CoverSelection from "../pages/CoverSelection";
+import ReferredJournal from "../pages/ReferredJournal";
+import Patent from "../pages/Patent";
 import { useCookies } from "react-cookie";
+
+
+
 
 function ProtectedRoute({ element }) {
   const [cookie] = useCookies();
@@ -38,9 +43,13 @@ export default function RouterComponent() {
           <Route path="notice" element={<Notice />} />
           <Route path="boardDetail" element={<BoardDetail />} />
           <Route path="publication/cover-selection" element={<CoverSelection />} />
+          <Route path="publication/refereed-journal" element={<ReferredJournal />} />
+          <Route path="patent" element={<Patent />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>
+
+
 
     </Router>
   );

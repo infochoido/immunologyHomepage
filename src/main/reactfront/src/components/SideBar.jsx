@@ -5,7 +5,7 @@ export default function SideBar({ title, subMenuItems }) {
   return (
     <div className="basis-1/10">
       {/* 제목 */}
-      <div className="flex justify-center h-20 bg-cardBlue1 items-center text-white text-3xl px-20 py-2">
+      <div className="flex justify-center h-14 bg-cardBlue1 items-center text-white text-3xl px-20 py-1 rounded-t-lg">
         {title}
       </div>
 
@@ -14,8 +14,9 @@ export default function SideBar({ title, subMenuItems }) {
         <Link
           key={index}
           to={item.link} // 링크 경로 설정
-          className="block w-full h-16 bg-white text-gray-800 text-xl text-left border border-gray-300 px-4 py-2 rounded shadow flex items-center justify-between hover:bg-gray-100 active:bg-gray-200 transition duration-200"
+          className="block w-full h-14 bg-white text-gray-800 text-xl text-left border border-gray-300 px-4 py-2 rounded shadow flex items-center justify-between hover:bg-gray-100 active:bg-gray-200 transition duration-200"
         >
+
           <span>{item.text}</span>
           <svg
             className="w-5 h-5 text-gray-600"

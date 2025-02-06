@@ -3,17 +3,18 @@ import { Link } from "react-router-dom";
 import PageTitle from "../components/PageTitle";
 import { getBoardByCategory } from "../apis";
 
-export default function Research() {
+export default function Patent() {
   const [data, setData] = useState([]);
   const ITEMS_PER_PAGE = 10;
   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
 
 
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getBoardByCategory("Research");
+        const response = await getBoardByCategory("Patent");
         if (response) { 
           const formattedData = response.categoryList.map((item) => ({
             board_number: item.boardNumber,

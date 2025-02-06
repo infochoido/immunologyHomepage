@@ -16,7 +16,7 @@ module.exports = {
         sans: ['"Noto Sans"', 'ui-sans-serif', 'system-ui'],
       },
       screens: {
-        'custom-mb': '768px',
+        'custom-mb': '1000px',
       },// 모바일 환경에서 css 이걸로 쓰십쇼
     },
   },

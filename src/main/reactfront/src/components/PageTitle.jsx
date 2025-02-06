@@ -10,6 +10,6 @@ export default function PageTitle({ title, subMenuItems }) {
     : "";
 
   return (
-    <h1 className="mt-4 text-[48px] font-bold">{formattedSegment}</h1>
+    <h1 className=" ml-4 text-[48px] font-bold">{formattedSegment}</h1>
   );
 }

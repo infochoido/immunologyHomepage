@@ -188,7 +188,11 @@ export default function BoardWrite() {
     if (category === 'Members') {
       setTitle('Members'); // Members 카테고리 선택시 자동으로 제목 설정
     }
+    if (category === 'Alumni') {
+      setTitle('Alumni'); // Alumni 카테고리 선택시 자동으로 제목 설정
+    }
   }, [category]);
+
 
 
   return (
@@ -237,13 +241,17 @@ export default function BoardWrite() {
               <option value="Professor">Professor</option>
               <option value="Notice">Notice</option>
               <option value="Research">Research</option>
-              <option value="Members">Members</option>
               <option value="Project">Project</option>
               <option value="CoverSelection">CoverSelection</option>
+              <option value="ReferredJournal">ReferredJournal</option>
+              <option value="Patent">Patent</option>
+              <option value="Members">Members</option>
+              <option value="Alumni">Alumni</option>
             </select>
           </div>
 
-          {category === 'Members' ? (
+          {/* Members나 Alumni 카테고리일 때 입력 폼 표시 */}
+          {(category === 'Members' || category === 'Alumni') ? (
             <div className="member-inputs space-y-4">
               <div>
                 <input
@@ -281,9 +289,18 @@ export default function BoardWrite() {
                 onChange={(e) => setMemberDegree(e.target.value)}
               >
                 <option value="">학위 선택</option>
-                <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
-                <option value="Master Students">Master Students</option>
-                <option value="Ph.D. Students">Ph.D. Students</option>
+                {category === 'Members' ? (
+                  <>
+                    <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
+                    <option value="Master Students">Master Students</option>
+                    <option value="Ph.D. Students">Ph.D. Students</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="Ph.D.">Ph.D.</option>
+                    <option value="M.S.">M.S.</option>
+                  </>
+                )}
               </select>
             </div>
           ) : (

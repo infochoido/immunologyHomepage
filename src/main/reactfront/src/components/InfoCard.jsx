@@ -24,11 +24,11 @@ export default function InfoCards() {
   ];
 
   return (
-    <div className="flex gap-[5%] pb-[100px] flex-col custom-mb:flex-row custom-mb:justify-center items-center">
+    <div className="flex gap-[5%] pb-[60px] sm:pb-[100px] flex-col custom-mb:flex-row custom-mb:justify-center items-center">
       {cards.map((card, index) => (
         <div
           key={index}
-          className={`${card.color} relative custom-mb:w-[316.92px] custom-mb:h-[400px] w-[90%] h-32 text-white text-center shadow-lg group overflow-hidden`}
+          className={`${card.color} relative custom-mb:w-[316.92px] custom-mb:h-[400px] w-[90%] h-28 sm:h-32 text-white text-center shadow-lg group overflow-hidden`}
         >
           {/* 배경 이미지와 투명도 */}
           <div
@@ -37,7 +37,7 @@ export default function InfoCards() {
               backgroundImage: `url(${card.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              opacity: 0.3, // 모든 카드에 동일한 투명도 적용
+              opacity: 0.3,
             }}
           ></div>
 
@@ -46,11 +46,11 @@ export default function InfoCards() {
 
           {/* 텍스트 영역 */}
           <div className="relative z-10 flex custom-mb:flex-col flex-row justify-center items-center h-full">
-            <h2 className="text-2xl font-bold m-1">{card.title}</h2>
-            <p className="text-sm m-1">{card.subtitle}</p>
+            <h2 className="text-lg sm:text-2xl font-bold m-1">{card.title}</h2>
+            <p className="text-xs sm:text-sm m-1">{card.subtitle}</p>
             <a
               href={card.link}
-              className="border-2 m-2 border-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-white hover:text-black transition"
+              className="border border-white sm:border-2 px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-semibold hover:bg-white hover:text-black transition m-1 sm:m-2"
             >
               MORE VIEW
             </a>

@@ -5,201 +5,81 @@ export default function Professor() {
     return (
         <div>
             <PageTitle/>
-            <div className="flex flex-row p-4 gap-12 mt-4 ">
-                <div class="flex flex-col basis-9/10 ">
-                    
+            <div className="flex flex-row p-4 gap-12 mt-4">
+                <div className="flex flex-col basis-9/10">
                     <div className="flex items-center">
                         {/* 이미지 */}
                         <img
                             className="w-48 h-auto"
-                            src="../assets/karina3.jpg"
+                            src="../assets/professorimg.png"
                             alt="professor"
                         />
                         
                         {/* 텍스트 */}
                         <div className="ml-4 text-xl">
-                        <div className="text-2xl">
-                        정광운 (鄭光云)<br></br>
-                        Kwang-Un Jeong, Ph.D.<br></br></div>
-                        <br></br>
-                        Department of Polymer-Nano Science and Technology,<br></br>
-                        Jeonbuk National University, Jeonju 561-756, Korea<br></br>
-                        Office: Room 707 in Building 2-9<br></br>
-                        Phone: 82-63-270-4633 (office), 82-10-8917-0905 (cell)
+                            <div className="text-2xl mb-4">
+                                김원일
+                                <div className="text-lg text-gray-500">Kim Wonil</div>  
+                            </div>
+
+                            <table className="w-full border-collapse">
+                                <tbody>
+                                    <tr>
+                                        <td className="py-1 pr-4 font-semibold">전공</td>
+                                        <td>수의면역학</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-1 pr-4 font-semibold">직위</td>
+                                        <td>교수</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-1 pr-4 font-semibold">전화번호</td>
+                                        <td>063)850-0958</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-1 pr-4 font-semibold">이메일</td>
+                                        <td>kwi0621@jbnu.ac.kr</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <br></br><br></br>
-                    <div>
-                    <div className = "text-2xl font-bold">EDUCATION</div><br></br>
 
-                    Ph. D. in Polymer Science , September 2001-August 2005
-                    University of Akron, Akron, OH 44325, USA
-                    Advisor: Prof. Stephen Z. D. Cheng
-                    Dissertation Title: Phase Structures and Self-Assembled Helical Supra-Molecular Structures in Achiral 4-Biphenyl Carboxylic Acids and Their Asymmetric Bent Polyesters
-
-                    M. S. in Materials Science and Engineering , March 1998-February 2000
-                    Gwangju Institute of Science and Technology, Gwangju, South Korea
-                    Advisor: Prof. Tae-Ho Yoon
-                    Thesis Title: Synthesis and Characterization of Novel Polyimide Containing Fluorine and Phosphine Oxide for Microelectronic Packaging and Optoelectronics
-
-                    B. S. in Fine Chemical Engineering , March 1991-February 1998
-                    Chonnam National University, Gwangju, South Korea
-                    (February 1992-May 1994: Sergeant, Republic of Korean Army)<br></br><br></br><br></br>
-
-
-                    <div className = "text-2xl font-bold">RESEARCH EXPERIENCE</div><br></br>
-
-                    Professor, October 2016 - Present
-                    Department of Polymer-Nano Science and Technology
-                    Jeonbuk National University, Jeonju 561-756, Korea
-
-                    Associate Professor, October 2012 - September 2016
-                    Department of Polymer-Nano Science and Technology
-                    Jeonbuk National University, Jeonju 561-756, Korea
-
-                    Assistant Professor, April 2009 - September 2012
-                    Department of Polymer-Nano Science and Technology
-                    Jeonbuk National University, Jeonju 561-756, Korea
-
-                    Full-Time Lecturer, April 2007-March 2009
-                    Department of Polymer-Nano Science and Technology
-                    Jeonbuk National University, Jeonju 561-756, Korea
-
-                    Postdoctoral Research Fellow, September 2006-March 2007
-                    Institute for Solider Nanotechnologies, with Prof. Edwin L. Thomas
-                    Massachusetts Institute of Technology, Cambridge, MA 02139, USA
-
-                    Postdoctoral Research Associate, September 2005-August 2006
-                    Maurice Morton Institute of Polymer Science, with Prof. Stephen Z. D. Cheng
-                    University of Akron, Akron, OH 44325, USA
-
-                    Graduate Research Assistant, September 2001-August 2005
-                    Department of Polymer Science, with Prof. Stephen Z. D. Cheng
-                    University of Akron, Akron, OH 44325, USA
-
-                    Research Associate, March 2000-July 2001
-                    Department of Materials Science and Engineering, with Prof. Tae-Ho Yoon
-                    Gwangju Institute of Science and Technology, Gwangju, 500-712, Korea
-
-                    Graduate Research Assistant, March 1998-February 2000
-                    Department of Materials Science and Engineering, with Prof. Tae-Ho Yoon
-                    Gwangju Institute of Science and Technology, Gwangju, 500-712, Korea<br></br><br></br><br></br>
-                
-                    <div className = "text-2xl font-bold">RESEARCH INTERESTS</div><br></br>
-
-                    Advanced Molecular Engineering
-                    - Synthesis and characterization of novel monomers and polymers for electronics, photonics, and energy
-                    - Self-assembly of supra-molecular (supra-object) structures as a function of molecular geometry and surface
-                    chemistry  on the different length scales for electro-optical applications
-                    - Intelligent hybrid materials for photonics, biosensors, and electro-mechanical devices
-
-                    Characterization Technology
-                    - Structural analysis: 1D & 2D WAXD, and SAED from a single crystal with sample tilting
-                    - Morphological analysis: AFM, bright & dark field TEM, SEM, PLM, and PCM
-                    - Thermal analysis: DSC, DMA, TMA, and TGA
-                    - Chemical analysis: FT-IR, solution & solid-state NMR (CP/MAS and Block decay), GPC, and EA
-                    - Mechanical analysis: peel & single lap shear adhesion test using an Instron Tensile Tester
-                    - Electrical & optical analysis: spontaneous polarization, refractive index, and dielectric constant
-                    - Computer simulation: Cerius2 4.6<br></br><br></br><br></br>
-
-
-
-
-
-
-
-                    <div className = "text-2xl font-bold">SELECTED RECENT PUBLICATION</div><br></br>
-
-
-                    Polariztion-Dependent and Color-Tunable Elecrochromic Smart Windows: Uniaxially Oriented and Polymer-Stabilized Viologen-Based Liquid Crystal Networks, Pham, H, H.; Rim, M.; Wi, Y.; Ko, H.; Yu, D.; Hyeong, J.; Tran, D, T.; Ha, M.; Na, S.-I.; Jeong, K.-U., Advanced Functional Materials, 2024, XX, 2403465, (IF = 18.5)
-
-
-
-                    Polarization-Dependent Thin Films with Biaxial Anisotropic Absorption Constructed by a Single Coating and Subsequent Topochemical Polymerization of Chromophores, Ko, H.; Kang, D.-G.; Choi, Y.-j.; Wi, Y.; Kim, S.; Pham, H, H.; Lee, K.; Godman, N, P.; McConney, M, E.; Jeong, K.-U., Journal of the American Chemical Society, 2024, 146, 4393-4401, (IF = 14.4)
-
-
-
-                    Ionic Conductivity Switchable and Shape Changeable Smart Skin with Azobenzene-Based Ionic Reactive Mesogens, Oh, M.; Lim, S.-I.; Jang, J.; Wi, Y.; Yu, D.; Hyeong, J.; Kim, S.; Kim, W.; Ha, M.; Jeong, K.-U., Advanced Functional Materials, 2024, 34, 2307011, (IF = 19.0) Selected as a Cover
-
-
-
-                    Encryptable Electrochromic Smart Windows: Uniaxially Oriented and Polymerized Hierarchical Nanostructures Constructed by Self-Assembly of Tetrathiafulvalene-Based Reactive Mesogens, Rim, M.; Kang, D.-G.; Kin, W.; Jang, J.; Oh, M.; Wi, Y.; Park, S.; Tran, D.; Ha, M.; Jeong, K.-U., ACS Nano, 2023, 17, 14750-14760, (IF = 17.1)
-
-
-
-                    When Chirophotonic Film Meets Wrinkles: Viewing Angle Independent Corrugated Photonic Crystal Paper, Lim, S.-I.; Jang, E.; Yu, D.; Koo, J.; Kang, D.-G.; Lee, K.; Godman, N, P.; McConney, M, E.; Kimm D.-Y.; Jeong, K.-U., Advanced Materials, 2023, 35, 2206764, (IF = 32.086) Selected as a Cover
-
-
-
-                    Chiroptical 3D Actuators for Smart Sensors, Han, S.; Lim, S.-I.; Ryu, K.-H.; Koo, J.; Kang, D.-G.; Jeong, K.-U.; Jeom, S.-Y.; Kim, D.-Y., Advanced Functional Materials, 2023, 33, 2210680, (IF = 19.924) Selected as a Cover
-
-
-
-                    Cyclometalated Pt(II)-Terpyridine Metallomesogen: What Is Visible or Invisible That Is a Matter of Molecular Packing and Orientation, Kang, D.-G.; Rim, M.; Ryu, K.-H.; Lee, K.; Godman, N.; McConney, M.; Sio, L.; Park, M.; Kim, D.-Y.; Jeong, K,-U., Advanced Functional Materials, 2022, 32, 2106559. (IF = 19.924) Selected as a Cover
-
-
-
-                    The transfer and amplification of cyanostilbenzene molecular function to advanced flexible optical paints through self-crosslinkable side-chain liquid crystal polysiloxanes, Koo, J.; Jang, J.; Lim, S.-I.; Oh, M.; Lee, K.; McConney, M.; Sio, L.; Kim, D.-Y.; Jeong, K.-U., Materials Horizons, 2021, 8, 1561-1569. (IF = 15.717)
-
-
-
-                    Imidazolium-Functionalized Diacetylene Amphiphiles: Strike a Light and Wear Polaroid Glasses to Decipher the Secret Code, Choi, Y.-J.; Park, S.; Yoon, W.-J.; Lim, S.-I.; Koo, J.; Kang, D.-G.; Park, S.; Kim, N.;  Jeong, K.-U., Advanced Materials, 2020, 32, 2003980. (IF = 32.086) Selected as a Cover
-
-
-
-                    A Single-Step Dual Stabilization of Smart Window by the Formation of Liquid Crystal Physical Gels and the Construction of Liquid Crystal Chambers, Yoon, W.-J.; Choi, Y.-J.; Lim, S.-I.; Koo, J.; Yang, S.; Jung, D.; Kang, S.-W.; Jeong, K.-U., Advanced Functional Materials, 2020, 25, 1906780. (IF = 19.924) Selected as a Cover
-
-
-
-
-
-
-
-                    <br></br><br></br><br></br>
-                    <div className="text-2xl font-bold">AWARD & HONORS</div><br></br>
-                    INNOX Academic Award
-                        The Korean Society of Industrial and Engineering Chemistry, May 9, 2024
-
-
-
-                    JBNU Fellow
-                        Jeonbuk National University College of Engineering, February 25, 2021
-
-
-
-                    Outstanding Mid-Career Research Award
-                        The Polymer Society of Korea, October 11, 2018
-
-                    Outstanding Professor Award
-                        Jeonbuk National University College of Engineering, Korea, October 13, 2017 and December 8, 2016
-
-                    GIST Alumni Award
-                        Gwangju Institute of Science and Technology, Korea, May 2, 2015
-
-                    LG Yonam Fellowship for Outstanding Professor
-                        LG Yonam Foundation, Korea, June 18, 2012
-
-                    Outstanding Teaching Award
-                        Jeonbuk National University, South Korea, October 15, 2011
-
-                    Information Technology National Scholarship for Outstanding Korean Overseas Graduate Student
-                        Ministry of Information and Communication of South Korea, ROK, September 2001 - August 2005
-
-                    OMNOVA Solutions Signature University Award for Outstanding Research in Polymer Science
-                        OMNOVA Solutions Inc., USA, April 14, 2004
-
-                    EASTMAN Chemical Co. Fellowship for Best Graduate Student in Polymer Science
-                        EASTMAN Chemical Company, USA, July 30, 2003
-
-                    Dr. Ronald K. Eby Award for Best Graduate Student
-                        University of Akron, USA, July 30, 2002
-
-                    Chonnam National University Alumni President Award for Summa Cum Laude
-                        Chonnam National University Alumni Association, ROK, Febration Scholarship
-                        University of British Columbia, British Columbia, Canada, January 1997 - February 1997
-
-                    Chonnam National University President Award for Outstanding Undergraduate
-                        Chonnam National University, ROK, February 26, 1996
+                    <div className="mt-12">
+                        <div className="text-2xl font-bold mb-4">학력</div>
+                        <ul className="list-disc pl-5 space-y-2">
+                            <li>학사: 경북대학교 수의과대학</li>
+                            <li>석사: 경북대학교 수의과대학 미생물학</li>
+                            <li>박사: Iowa 주립대학교 수의과대학 미생물학</li>
+                            <li>Diplomate of American College of Veterinary Microbiologists, specialty in Virology</li>
+                        </ul>
+
+                        <div className="text-2xl font-bold mt-12 mb-4">경력</div>
+                        <ul className="list-disc pl-5 space-y-2">
+                            <li>2000-2002 가축위생연구사: 국립수의과학검역원</li>
+                            <li>2002-2006 연구조교: Iowa 주립대학교 수의과대학</li>
+                            <li>2007-2009 Iowa 주립대학교 수의과대학 교수</li>
+                            <li>2009-현재 전북대학교 수의과대학 교수</li>
+                            <li>(재)한국동물용의약품평가연구원장</li>
+                        </ul>
+
+                        <div className="text-2xl font-bold mt-12 mb-4">대표논문</div>
+                        <ul className="list-disc pl-5 space-y-4">
+                            <li>Kim S-C, Jeong C-G, Nazki S, Lee S-I, Baek Y-C, Jung Y-J, Kim W-I. 2021. Evaluation of a multiplex PCR method for thedetection of porcine parvovirus types 1 through 7 using various field samples. PLoS ONE, 16:1</li>
+                            <li>Lim B, Kim S, Lim K-S, Jeong C-G, Kim S-C, Lee S-M, Park C-K, Pas MFW, Cho H, Kim T-H, Lee K-T, Kim W-I, Kim J-M. 2020. Integrated time-serial transcriptome networks reveal common innate and tissue-specific adaptive immune responses to PRRSV infection. Veterinary Research, 51:128</li>
+                            <li>Nazki S, Khatun A, Jeong C-G, Mattoo, SS, Gu S, Lee S-I, Kim S-C, Park J-H, Yang M-S, Kim B, Park C-K, Lee S-M, Kim W-I. 2020. Evaluation of local and systemic immune responses in pigs experimentally challenged with porcine reproductive and respiratory syndrome virus. Veterinary Research, 51:66</li>
+                            <li> Khatun A, Nazki S, Jeong C-G, Gu S, Mattoo, SS, Lee S-I, Yang M-S, Lim B, Kim K-S, Lee K-T, Kim B, Park C-K, Lee S-M, Kim W-I. 2020. Effect of polymorphisms in porcine guanylate-binding proteins on host resistance to PRRSV infection in experimentally challenged pigs. Veterinary Research, 51:14</li>
+                            <li>Khatun A, Park SY, Shabir N, Nazki S, Kang A-R, Jeong C-G, Seo B-J, Yang M-S, Kim B, Seo Y-H, Kim W-I. 2019. Evaluation of the Inhibitory Effects of (E)-1-(2-hydroxy-4,6-dimethoxyphenyl)-3-(naphthalen-1-yl) prop-2-en-1-one (DiNap), a Natural Product Analog, on the Replication of Type 2 PRRSV In Vitro and In Vivo. Molecules, 24:887</li>
+                            <li>Shabir N, Khatun A, Nazki S, Gu S, Lee S-M, Hur T-Y, Yang M-S, Kim B, Kim W-I. 2018. In vitro immune responses of porcine alveolar macrophages reflect host immune responses against porcine reproductive and respiratory syndrome viruses. BMC Veterinary Research, 14:380</li>
+                            <li>Kim S-C, Nazki S, Kwon S, Jhung J-H, Mun K-H, Jeon D-Y, Jeong C-G, Khatun A, Kang S-J, Kim W-I. 2018. The prevalence and genetic characteristics of porcine circovirus type 2 and 3 in Korea. BMC Veterinary Research, 14:294</li>
+                            <li>Shabir N, Khatun A, Nazki S, Kim B, Choi E-J, Sun D, Yoon K-J, Kim W-I. 2016. Attempts to enhance cross-protection against porcine reproductive and respiratory syndrome viruses using chimeric viruses containing structural genes from two antigenically distinct strains. Viruses, 8, 240</li>
+                            <li>Sun D, Khatun A, Kim W-I, Cooper V, Cho Y-I, Wang C, Choi E-J, Yoon K-J. 2016. Attempts to enhance cross-protection against porcine reproductive and respiratory syndrome viruses using chimeric viruses containing structural genes from two antigenically distinct strains. Vaccine, 34: 4335-4342</li>
+                            <li>Khatun A, Shabir N, Seo B-S, Kim B, Yoon K-J, Kim W-I. 2016. The attenuation phenotype of a ribavirin-resistant porcine reproductive and respiratory syndrome virus (PRRSV) was maintained during sequential passages in pigs. Journal of Virology, 90: 4454-4468</li>
+                            <li>Niu P, Shabir N, Khatun A, Seo B-J, Gu S, Lee S-M, Lim S-K, Kim K-S, Kim W-I. 2016. Effect of polymorphisms in the GBP1, Mx1 and CD163 genes on host responses to PRRSV infection in pigs. Veterinary Microbiology, 182: 187-195</li>
+                            <li>Seo B-J, Kim H-I, Cho H-S, Park B-Y, Kim W-I. 2015. Evaluation of two commercial PRRSV antibody ELISA kits with samples of known status and singleton reactors. J Vet Med Sci, 78: 133-138</li>
+                            <li>Khatun A, Shabir N, Yoon K-J, Kim W-I. 2015. Effects of ribavirin on the replication and genetic stability of procine reproductive and respiratory syndrome virus. BMC Veterinary Research, 11:21</li>
+                            <li>Kim W-I, Kim J-J, Cha S-H, Wu W-H, Evans R, Yoon K-J. 2013. Significance of genetic variation of PRRSV ORF5 in virus neutralization and molecular determinants corresponding to cross neutralization among PRRS viruses. Veterinary Microbiology, 162: 10-22</li>
+                        </ul>
                     </div>
                 </div>
             </div>
