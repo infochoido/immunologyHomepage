@@ -49,7 +49,19 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/v1/images/**").permitAll()
                 .requestMatchers("/api/v1/board/**").permitAll()
                 .requestMatchers("/api/v1/upload").permitAll()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/error").permitAll()
+                .requestMatchers(
+                    "/",
+                    "/index.html",
+                    "/static/**",
+                    "/assets/**",
+                    "/*.ico",
+                    "/*.json",
+                    "/*.png",
+                    "/manifest.json",
+                    "/**"
+                ).permitAll()
+                .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

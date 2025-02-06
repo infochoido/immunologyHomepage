@@ -10,6 +10,7 @@ export default function BoardDetail() {
   const location = useLocation(); // 현재 URL의 정보를 가져옴
   const searchParams = new URLSearchParams(location.search); // 쿼리 문자열 파싱
   const boardNumber = searchParams.get("board_number"); // 'board_number' 값 가져오기
+  const writeDatetime = location.state?.writeDatetime;  // 전달받은 날짜 정보
   const [cookies] = useCookies(['accessToken']);
   const navigate = useNavigate();
   const { loginUser } = useLoginuserStore();
@@ -86,13 +87,7 @@ export default function BoardDetail() {
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  {data.writeDateTime ? new Date(data.writeDateTime).toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  }) : '날짜 없음'}
+                  {writeDatetime || '날짜 없음'}
                 </div>
                 <div className="flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

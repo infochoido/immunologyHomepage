@@ -50,13 +50,14 @@ export default function Patent() {
               data.slice(0, visibleItems).map((item, index) => (
                 <tr key={index}>
                   <td className="px-2 text-left hover:bg-gray-100">
-                    <Link
-                      className="cursor-pointer hover:underline text-xs sm:text-base"
-                      to={`/boardDetail?board_number=${item.board_number}`}
-                    >
-                      {item.title}
-                    </Link>
-                  </td>
+  <Link
+    className="cursor-pointer hover:underline text-xs sm:text-base"
+    to={`/boardDetail?board_number=${item.board_number}`}
+    state={{ writeDatetime: item.writeDatetime }}
+  >
+    {item.title}
+  </Link>
+</td>
                   <td className="px-2 text-right text-xs sm:text-base">{item.writeDatetime}</td>
                 </tr>
               ))

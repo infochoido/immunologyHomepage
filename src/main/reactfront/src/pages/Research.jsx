@@ -52,6 +52,7 @@ export default function Research() {
                     <Link
                       className="cursor-pointer hover:underline text-xs sm:text-base"
                       to={`/boardDetail?board_number=${item.board_number}`}
+                      state={{ writeDatetime: item.writeDatetime }}
                     >
                       {item.title}
                     </Link>

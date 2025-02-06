@@ -16,7 +16,7 @@ export default function Professor() {
                         />
                         
                         {/* 텍스트 */}
-                        <div className="ml-4 text-xl">
+                        <div className="ml-4 text-base">
                             <div className="text-2xl mb-4">
                                 김원일
                                 <div className="text-lg text-gray-500">Kim Wonil</div>  

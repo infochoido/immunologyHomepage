@@ -10,7 +10,6 @@ module.exports = {
         cardBlue3: "#8690FB", // 약한 파랑랑
         backgroundGreen: "#F1F8E9", // 파스텔 민트/연두색 (배경색)
         customGray:'#464555',
-
       },
       fontFamily: {
         sans: ['"Noto Sans"', 'ui-sans-serif', 'system-ui'],
@@ -18,6 +17,15 @@ module.exports = {
       screens: {
         'custom-mb': '1000px',
       },// 모바일 환경에서 css 이걸로 쓰십쇼
+      fontSize: {
+        base: '1rem',
+        lg: '1.125rem',
+        xl: '1.25rem',
+        '2xl': '1.5rem',
+      },
+      spacing: {
+        // 여기서 기본 간격 설정을 확인
+      }
     },
   },
   plugins: [
