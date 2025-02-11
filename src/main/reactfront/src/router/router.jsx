@@ -4,14 +4,14 @@ import Home from "../pages/Home";
 import Professor from "../pages/Professor";
 import Members from "../pages/Members";
 import Alumni from "../pages/Alumni";
-import Research from "../pages/Research";
-import Project from "../pages/Project";
+import Research from "../pages/Introduction";
 import Notice from "../pages/Notice";
 import BoardWrite from "../pages/BoardWrite";
 import BoardDetail from "../pages/BoardDetail";
-import CoverSelection from "../pages/CoverSelection";
-import ReferredJournal from "../pages/ReferredJournal";
+import Paper from "../pages/Paper";
 import Patent from "../pages/Patent";
+import Achievements from "../pages/Achievements";
+import BoardEdit from "../pages/BoardEdit";
 import { useCookies } from "react-cookie";
 
 
@@ -35,16 +35,29 @@ export default function RouterComponent() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="professor" element={<Professor />} />
+         
           <Route path="board-write" element={<ProtectedRoute element={<BoardWrite />} />} />
+          
+          
           <Route path="member/members" element={<Members />} />
           <Route path="member/alumnis" element={<Alumni />} />
-          <Route path="research/research" element={<Research />} />
-          <Route path="research/project" element={<Project />} />
+          
+          
+          <Route path="/introduction" element={<Research />} />
+          
+          
+          
+          <Route path="publication/paper" element={<Paper />} />
+          <Route path="publication/patent" element={<Patent />} />
+
           <Route path="notice" element={<Notice />} />
+
+          <Route path="achievements" element={<Achievements />} />
+
           <Route path="boardDetail" element={<BoardDetail />} />
-          <Route path="publication/cover-selection" element={<CoverSelection />} />
-          <Route path="publication/refereed-journal" element={<ReferredJournal />} />
-          <Route path="patent" element={<Patent />} />
+
+          <Route path="/board/edit/:boardNumber" element={<BoardEdit />} />
+          
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Route>
       </Routes>

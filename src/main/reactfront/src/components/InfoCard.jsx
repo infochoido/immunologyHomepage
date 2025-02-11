@@ -1,25 +1,25 @@
 export default function InfoCards() {
   const cards = [
     {
-      title: "실험실 소개",
-      subtitle: "Labatory Introduction",
+      title: "교수님 소개",
+      subtitle: "Professor Introduction",
       color: "bg-cardBlue1",
       image: "../assets/lab.jpg",
-      link: "#",
+      link: "/professor",
     },
     {
-      title: "연구 과정",
-      subtitle: "Research Curriculum",
+      title: "실험실 소개",
+      subtitle: "Lab introduction",
       color: "bg-cardBlue2",
       image: "../assets/clinical.jpg",
-      link: "#",
+      link: "/introduction",
     },
     {
-      title: "참여기업",
-      subtitle: "Participating Companies",
+      title: "주요 실적",
+      subtitle: "Achievements",
       color: "bg-cardBlue3",
       image: "../assets/company.jpg",
-      link: "#",
+      link: "/achievements",
     },
   ];
 

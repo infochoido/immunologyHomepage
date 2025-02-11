@@ -1,74 +1,96 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { getBoardDetail, putBoardRequest, fileUploadRequest } from '../apis';
-import PageTitle from '../components/PageTitle';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+import { getBoardDetail, putBoardRequest, uploadImage } from '../apis';
 
 export default function BoardEdit() {
+  // 일반 게시글용 state
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
+  const [uploadedUrls, setUploadedUrls] = useState([]);
+
+
   const [cookies] = useCookies(['accessToken']);
   const navigate = useNavigate();
   const { boardNumber } = useParams();
-  const [uploadedUrls, setUploadedUrls] = useState([]);
-  const quillRef = useRef();
+  const quillRef = React.useRef();
+  const location = useLocation();
 
-  // 이미지 핸들러 함수
-  const imageHandler = () => {
+  const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
-    input.click();
-
+    
     input.onchange = async () => {
       const file = input.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const response = await fileUploadRequest(formData);
-        if (response && response.url) {
-          const url = response.url;
-          setUploadedUrls(prev => [...prev, url]);
-          
-          const quill = quillRef.current.getEditor();
-          const range = quill.getSelection();
-          quill.insertEmbed(range.index, 'image', url);
+      if (file) {
+        try {
+          const imageUrl = await uploadImage(file, cookies.accessToken);
+          if (imageUrl) {
+            const quillEditor = quillRef.current.getEditor();
+            const range = quillEditor.getSelection(true);
+            
+            
+            // 에디터에 표시할 전체 URL
+            const fullUrl = `https://jbnuvetmedimmunelab.store${imageUrl}`;
+            quillEditor.insertEmbed(range.index, 'image', fullUrl);
+            
+            // 이미지 스타일 설정
+            const image = quillEditor.root.querySelector(`img[src="${fullUrl}"]`);
+            if (image) {
+              image.style.maxWidth = '100%';
+              image.style.height = 'auto';
+            }
+            
+            // uploadedUrls 업데이트
+            setUploadedUrls(prev => [...prev, imageUrl]);
+          }
+        } catch (error) {
+          console.error('이미지 업로드 실패:', error);
+          alert('이미지 업로드에 실패했습니다.');
         }
-      } catch (error) {
-        console.error('이미지 업로드 실패:', error);
       }
     };
-  };
+    input.click();
+  }, [cookies.accessToken]);
 
-  // Quill 모듈 설정
   const modules = useMemo(() => ({
     toolbar: {
       container: [
         [{ header: [1, 2, 3, false] }],
         ["bold", "italic", "underline", "strike"],
-        ["image"],
+        ["blockquote", "code-block"],
         [{ list: "ordered" }, { list: "bullet" }],
         [{ align: [] }],
-        ["clean"],
+        ["link", "image"],
+        [{ size: ["small", false, "large", "huge"] }],
+        ["clean"]
       ],
       handlers: {
-        image: imageHandler,
-      },
-    },
-  }), []);
+        image: imageHandler
+      }
+    }
+  }), [imageHandler]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getBoardDetail(boardNumber);
         if (response) {
+          const currentCategory = location.state?.category || response.category || 'Notice';
+          setCategory(currentCategory);
+          
+          if (currentCategory === 'Professor') {
+            setContent(location.state.fixedProfile + response.content);
+          } else if (currentCategory === 'Introduction') {
+            setContent(response.content);
+          } else {
+            setContent(response.content);
+          }
           setTitle(response.title);
-          setContent(response.content);
-          setCategory(response.category);
         }
       } catch (error) {
         console.error('데이터 로딩 실패:', error);
@@ -79,18 +101,21 @@ export default function BoardEdit() {
     if (boardNumber) {
       fetchData();
     }
-  }, [boardNumber]);
+  }, [boardNumber, location.state]);
 
   const handleSubmit = async () => {
-    if (!title.trim() || !content.trim() || !category) {
-      alert('제목, 내용, 카테고리를 모두 입력해주세요.');
-      return;
-    }
-
     try {
+      if (!title || !content || !category) {
+        alert('제목, 내용, 카테고리를 모두 입력해주세요.');
+        return;
+      }
+
+      let finalContent = content;
+      
+
       const requestBody = {
         title,
-        content,
+        content: finalContent,
         category,
         boardImageList: uploadedUrls
       };
@@ -99,7 +124,23 @@ export default function BoardEdit() {
 
       if (response.code === 'SU') {
         alert('게시글이 수정되었습니다.');
-        navigate(`/boardDetail?board_number=${boardNumber}`);
+        // 카테고리별 리다이렉션
+        switch (category) {
+          case 'Professor':
+            navigate('/professor');
+            break;
+          case 'Paper':
+            navigate('/publication/paper');
+            break;
+          case 'Notice':
+            navigate('/notice');
+            break;
+          case 'Introduction':
+            navigate('/introduction');
+            break;
+          default:
+            navigate(`/boardDetail?board_number=${boardNumber}`);
+        }
       } else {
         alert('게시글 수정에 실패했습니다.');
       }
@@ -110,51 +151,54 @@ export default function BoardEdit() {
   };
 
   return (
-    <div>
-      <PageTitle />
-      <div className="mx-16 mt-8">
-        <div className="mb-4">
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="text-2xl font-bold mb-4">글 수정페이지</div>
+      
+      <div className="mt-8">
+        <div className="flex gap-4 mb-4">
           <input
-            type="text"
+            className="flex-1 p-2 border rounded"
+            placeholder="제목"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요"
-            className="w-full p-2 border rounded"
           />
-        </div>
-
-        <div className="mb-4">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-32 p-2 border rounded bg-white"
           >
-            <option value="">카테고리 선택</option>
-            <option value="Notice">Notice</option>
-            <option value="Research">Research</option>
-            <option value="Professor">Professor</option>
+            <option value="">카테고리</option>
+            <option value="Notice">공지사항</option>
+            <option value="Research">연구</option>
+            <option value="Paper">논문</option>
+            <option value="Members">구성원</option>
+            <option value="Alumni">졸업생</option>
+            <option value="Professor">교수</option>
+            <option value="Introduction">실험실 소개</option>
           </select>
         </div>
 
-        <div className="mb-4">
+        <div className="min-h-[600px] mb-8">
           <ReactQuill
+            ref={quillRef}
             value={content}
             onChange={setContent}
             modules={modules}
-            className="h-96"
+            className="h-[500px]"
+            style={{ height: '500px' }}
           />
         </div>
 
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex justify-end gap-4 mt-6">
           <button
             onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            className="px-6 py-2.5 rounded text-gray-600 font-medium hover:bg-gray-100 transition-colors border border-gray-300"
           >
             취소
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-6 py-2.5 rounded bg-[#023793] text-white font-medium hover:bg-[#034ABC] transition-colors"
           >
             수정완료
           </button>

@@ -21,6 +21,10 @@ export default function BoardWrite() {
   const [memberEmail, setMemberEmail] = useState('');
   const [memberDegree, setMemberDegree] = useState('');
   const [memberImage, setMemberImage] = useState('');
+  const [paperTitle, setPaperTitle] = useState('');
+  const [authors, setAuthors] = useState('');
+  const [publishDate, setPublishDate] = useState('');
+  const [paperLink, setPaperLink] = useState('');
 
   const imageHandler = useCallback(() => {
     const input = document.createElement('input');
@@ -31,30 +35,33 @@ export default function BoardWrite() {
       const file = input.files[0];
       if (file) {
         try {
-          const accessToken = cookies.accessToken;
-          const imageUrl = await uploadImage(file, accessToken);
+          const imageUrl = await uploadImage(file, cookies.accessToken);
+          console.log('업로드된 이미지 URL:', imageUrl);
           
           if (imageUrl) {
-            const quillEditor = quillRef.current.getEditor();
-            const range = quillEditor.getSelection(true);
-            
-            // 이미지 삽입 시 크기 조절 가능하도록 설정
-            const fullUrl = getImageUrl(imageUrl);
-            quillEditor.insertEmbed(range.index, 'image', fullUrl);
-            
-            // 이미지 선택 및 크기 조절 가능하도록 설정
-            const image = quillEditor.root.querySelector(`img[src="${fullUrl}"]`);
-            if (image) {
-              image.style.maxWidth = '100%';
-              image.style.height = 'auto';
-              image.setAttribute('data-align', 'center');  // 기본 중앙 정렬
-              
-              // 이미지 크기 조절 핸들러 추가
-              image.setAttribute('contenteditable', 'false');
-              image.setAttribute('resizable', 'true');
+            // Members나 Alumni 카테고리일 때는 API 경로 포함
+            if (category === 'Members' || category === 'Alumni') {
+              const apiImageUrl = `/api/v1/images/${imageUrl}`;
+              console.log('API 이미지 URL:', apiImageUrl);
+              setMemberImage(apiImageUrl);
+              console.log('memberImage:', memberImage);
+              // 프로필 이미지 업로드 시 memberData 업데이트
+              const memberData = {
+                name: memberName,
+                email: memberEmail,
+                degree: memberDegree,
+                image: apiImageUrl
+              };
+              setContent(JSON.stringify(memberData));
             }
             
-            setUploadedUrls(prev => [...prev, fullUrl]);
+            // 에디터에 표시할 전체 URL
+            const fullUrl = `https://jbnuvetmedimmunelab.store/api/v1/images/${imageUrl}`;
+            const quillEditor = quillRef.current.getEditor();
+            const range = quillEditor.getSelection(true);
+            quillEditor.insertEmbed(range.index, 'image', fullUrl);
+            
+            setUploadedUrls(prev => [...prev, imageUrl]);
           }
         } catch (error) {
           console.error('이미지 업로드 실패:', error);
@@ -62,9 +69,8 @@ export default function BoardWrite() {
         }
       }
     };
-
     input.click();
-  }, [cookies.accessToken]);
+  }, [cookies.accessToken, category, memberName, memberEmail, memberDegree]);
 
   // modules 정의 수정
   const modules = useMemo(() => ({
@@ -127,24 +133,19 @@ export default function BoardWrite() {
   };
 
   // 게시글 업로드 버튼 클릭 시
-  const onSubmitButtonClickHandler = async () => {
+  const handleSubmit = async () => {
     try {
-      const accessToken = cookies.accessToken;
+
       let finalContent = content;
-
-      if (category === 'Members') {
-        // 필수 필드 검증
-        if (!memberName || !memberEmail || !memberDegree || !uploadedUrls[0]) {
-          alert('모든 필드를 입력해주세요.');
-          return;
-        }
-
-        finalContent = JSON.stringify({
+      
+      if (category === 'Members' || category === 'Alumni') {
+        const memberData = {
           name: memberName,
           email: memberEmail,
           degree: memberDegree,
-          image: `/api/v1/images/${uploadedUrls[0]}`  // 전체 경로로 수정
-        });
+          image: `/api/v1/images/${memberImage}`
+        };
+        finalContent = JSON.stringify(memberData);
       }
 
       const requestBody = {
@@ -153,24 +154,25 @@ export default function BoardWrite() {
         category,
         boardImageList: uploadedUrls
       };
+
+      const response = await postBoardRequest(requestBody, cookies.accessToken);
       
-      const response = await postBoardRequest(requestBody, accessToken);
-      
-      if (response.code === 'SU') {  // 성공 코드 확인
-        alert('게시글이 작성되었습니다.');
+      if (response && response.code === 'SU') {
+        alert("게시글이 등록되었습니다.");
         if (category === 'Members') {
-          navigate('/members');  // Members 카테고리일 경우 members 페이지로 이동
+          navigate('/member/members');
+        } else if (category === 'Alumni') {
+          navigate('/member/alumnis');
         } else {
-          navigate('/');
+          navigate(-1);
         }
         resetBoard();
       } else {
-        alert('게시글 작성에 실패했습니다.');
+        alert("게시글 등록에 실패했습니다.");
       }
-
     } catch (error) {
-      console.error('게시글 작성 중 오류 발생:', error);
-      alert('게시글 작성에 실패했습니다.');
+      console.error("게시글 등록 실패:", error);
+      alert("게시글 등록에 실패했습니다.");
     }
   };
 
@@ -184,21 +186,46 @@ export default function BoardWrite() {
     resetBoard();
   }, [cookies, navigate, resetBoard]);
 
+  // category가 변경될 때 title 자동 설정을 위한 useEffect 수정
   useEffect(() => {
     if (category === 'Members') {
-      setTitle('Members'); // Members 카테고리 선택시 자동으로 제목 설정
-    }
-    if (category === 'Alumni') {
-      setTitle('Alumni'); // Alumni 카테고리 선택시 자동으로 제목 설정
+      setTitle('Members');
+    } else if (category === 'Alumni') {
+      setTitle('Alumni');
+    } else if (category === 'Paper') {
+      setTitle('Paper');
     }
   }, [category]);
 
+  // Quill 에디터를 사용하는 카테고리인지 확인하는 함수
+  const isQuillCategory = (cat) => {
+    return !['Members', 'Alumni', 'Paper'].includes(cat);
+  };
 
+  // 카테고리 변경 핸들러
+  const handleCategoryChange = (e) => {
+    const newCategory = e.target.value;
+    const oldCategory = category;
+    setCategory(newCategory);
+
+    // 이전 카테고리와 새 카테고리 모두 Quill을 사용하는 경우
+    if (isQuillCategory(oldCategory) && isQuillCategory(newCategory)) {
+      const quillEditor = quillRef.current.getEditor();
+      if (quillEditor) {
+        // 에디터 내용 유지하면서 리렌더링
+        const currentContent = quillEditor.getContents();
+        quillEditor.setContents([]);
+        setTimeout(() => {
+          quillEditor.setContents(currentContent);
+        }, 0);
+      }
+    }
+  };
 
   return (
-    <div>
+    <div className="max-w-6xl mx-auto px-4 py-8">
       <div style={{ width: "100%", height: "90vh" }}>
-        <div style={{ width: "1000px", margin: "auto", borderRadius: "19px" }}>
+        <div style={{  margin: "auto", borderRadius: "19px" }}>
           <div
             style={{
               marginBottom: "20px",
@@ -221,9 +248,11 @@ export default function BoardWrite() {
                 width: "100%",
                 border: "1px solid lightGray",
                 fontSize: "15px",
+                backgroundColor: category === 'Paper' || category === 'Members' || category === 'Alumni' ? '#f0f0f0' : 'white', // 비활성화 시 배경색 변경
               }}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              disabled={category === 'Paper' || category === 'Members' || category === 'Alumni'} // Paper, Members, Alumni 카테고리일 때 비활성화
             />
             <select
               className="Category"
@@ -235,80 +264,157 @@ export default function BoardWrite() {
                 fontSize: "15px",
               }}
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={handleCategoryChange}
             >
               <option value={null}>카테고리 선택</option>
-              <option value="Professor">Professor</option>
               <option value="Notice">Notice</option>
-              <option value="Research">Research</option>
-              <option value="Project">Project</option>
-              <option value="CoverSelection">CoverSelection</option>
-              <option value="ReferredJournal">ReferredJournal</option>
-              <option value="Patent">Patent</option>
+
+              <option value="Paper">논문</option>
+              <option value="Patent">특허</option>
+              <option value="Achievements">업적</option>
+
+
               <option value="Members">Members</option>
               <option value="Alumni">Alumni</option>
+             
             </select>
           </div>
 
           {/* Members나 Alumni 카테고리일 때 입력 폼 표시 */}
           {(category === 'Members' || category === 'Alumni') ? (
-            <div className="member-inputs space-y-4">
-              <div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={async (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      try {
-                        const imageUrl = await uploadImage(file, cookies.accessToken);
-                        setMemberImage(imageUrl);
-                        setUploadedUrls([imageUrl]);
-                      } catch (error) {
-                        console.error('이미지 업로드 실패:', error);
+            <div className="member-inputs space-y-4 p-6 bg-gray-50 rounded-lg">
+              <div className="mb-6">
+                <div className="text-sm text-gray-500 mb-4">
+                  <span className="text-red-500">*</span> 표시는 필수 입력 항목입니다
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    프로필 이미지 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="w-full p-2 border rounded bg-white"
+                    onChange={async (e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        try {
+                          const imageUrl = await uploadImage(file, cookies.accessToken);
+                          setMemberImage(imageUrl);
+                          setUploadedUrls([imageUrl]);
+                          console.log('업로드된 이미지 URL:', imageUrl); // 응답 확인
+                        } catch (error) {
+                          console.error('이미지 업로드 실패:', error);
+                        }
                       }
-                    }
-                  }}
+                    }}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    이름 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    className="w-full p-2 border rounded bg-white"
+                    placeholder="이름을 입력하세요"
+                    value={memberName}
+                    onChange={(e) => setMemberName(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    이메일 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    className="w-full p-2 border rounded bg-white"
+                    placeholder="이메일을 입력하세요"
+                    value={memberEmail}
+                    onChange={(e) => setMemberEmail(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    학위 <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-full p-2 border rounded bg-white"
+                    value={memberDegree}
+                    onChange={(e) => setMemberDegree(e.target.value)}
+                  >
+                    <option value="">학위를 선택하세요</option>
+                    {category === 'Members' ? (
+                      <>
+                        <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
+                        <option value="Master Students">Master Students</option>
+                        <option value="Ph.D. Students">Ph.D. Students</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="Ph.D.">Ph.D.</option>
+                        <option value="M.S.">M.S.</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+              </div>
+            </div>
+          ) : category === 'Paper' ? (
+            <div className="paper-inputs space-y-4 p-6 bg-gray-50 rounded-lg">
+              <div className="text-sm text-gray-500 mb-4">
+                <span className="text-red-500">*</span> 표시는 필수 입력 항목입니다
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  논문 제목 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  className="w-full p-2 border rounded bg-white"
+                  placeholder="논문 제목을 입력하세요"
+                  value={paperTitle}
+                  onChange={(e) => setPaperTitle(e.target.value)}
                 />
               </div>
-              <input
-                className="w-full p-2 border rounded"
-                placeholder="이름"
-                value={memberName}
-                onChange={(e) => setMemberName(e.target.value)}
-              />
-              <input
-                className="w-full p-2 border rounded"
-                placeholder="이메일"
-                value={memberEmail}
-                onChange={(e) => setMemberEmail(e.target.value)}
-              />
-              <select
-                className="w-full p-2 border rounded"
-                value={memberDegree}
-                onChange={(e) => setMemberDegree(e.target.value)}
-              >
-                <option value="">학위 선택</option>
-                {category === 'Members' ? (
-                  <>
-                    <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
-                    <option value="Master Students">Master Students</option>
-                    <option value="Ph.D. Students">Ph.D. Students</option>
-                  </>
-                ) : (
-                  <>
-                    <option value="Ph.D.">Ph.D.</option>
-                    <option value="M.S.">M.S.</option>
-                  </>
-                )}
-              </select>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  저자 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  className="w-full p-2 border rounded bg-white"
+                  placeholder="저자들을 콤마(,)로 구분하여 입력하세요"
+                  value={authors}
+                  onChange={(e) => setAuthors(e.target.value)}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  출판일 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  className="w-full p-2 border rounded bg-white"
+                  type="date"
+                  value={publishDate}
+                  onChange={(e) => setPublishDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  논문 링크
+                </label>
+                <input
+                  className="w-full p-2 border rounded bg-white"
+                  placeholder="논문 링크를 입력하세요 (선택사항)"
+                  value={paperLink}
+                  onChange={(e) => setPaperLink(e.target.value)}
+                />
+              </div>
             </div>
           ) : (
-            <div style={{ height: "650px" }}>
+            <div style={{ height: "650px" }} key={category}>
               <ReactQuill
                 ref={quillRef}
                 modules={modules}
                 formats={formats}
+                value={content}
                 placeholder="내용을 입력해 주세요"
                 onChange={(value) => setContent(value)}
                 style={{ height: "600px" }}
@@ -317,9 +423,13 @@ export default function BoardWrite() {
           )}
 
           {/* ======== Button ======== */}
-          <div style={{ float: "right" }}>
-            <button style={{ marginRight: "10px" }}>취소</button>
-            <button onClick={onSubmitButtonClickHandler}>업로드</button>
+          <div className="flex justify-end mt-5">
+            <button
+              className="px-4 py-2 rounded-md bg-[#023793] text-white font-semibold hover:bg-[#034ABC] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none"
+              onClick={handleSubmit}
+            >
+              업로드
+            </button>
           </div>
         </div>
       </div>

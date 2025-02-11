@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PageTitle from "../components/PageTitle";
 import { getBoardByCategory } from "../apis";
 
-export default function Notice() {
+export default function Achievements() {
   const [data, setData] = useState([]);
   const ITEMS_PER_PAGE = 12;
   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
@@ -19,7 +19,7 @@ export default function Notice() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getBoardByCategory("Notice");
+        const response = await getBoardByCategory("Achivements");
         if (response) {
           const formattedData = response.categoryList.map((item) => ({
             board_number: item.boardNumber,

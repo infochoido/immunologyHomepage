@@ -5,7 +5,7 @@ export default function SideBar({ title, subMenuItems }) {
   return (
     <div className="basis-1/10">
       {/* 제목 */}
-      <div className="flex justify-center h-14 bg-cardBlue1 items-center text-white text-3xl px-20 py-1 rounded-t-lg">
+      <div className="flex justify-center h-14 bg-cardBlue1 items-center text-white text-3xl px-10 py-1 rounded-t-lg">
         {title}
       </div>
 

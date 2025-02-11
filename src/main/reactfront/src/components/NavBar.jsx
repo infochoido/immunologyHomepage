@@ -17,34 +17,33 @@ export default function NavBar() {
   const [cookie] = useCookies();
 
   const menuItems = [
-    { text: "Professor", link: "/professor" },
+    { text: "교수님소개", link: "/professor" },
     {
-      text: "Members",
+      text: "실험실소개",
+      link: "/introduction",
+    },
+    {
+      text: "구성원 소개",
       link: null,
       subItems: [
         { text: "Members", link: "/member/members" },
         { text: "Alumni", link: "/member/alumnis" },
       ],
     },
-    {
-      text: "Research",
-      link: null,
-      subItems: [
-        { text: "Research", link: "/research/research" },
-        { text: "Project", link: "/research/project" },
-      ],
-    },
+    // {
+    //   text: "주요 실적",
+    //   link: "/achievements",
+    // },
+    
     {
       text: "Publication",
       link: null,
       subItems: [
-        { text: "Cover Selection", link: "/publication/cover-selection" },
-        { text: "Refereed Journal", link: "/publication/refereed-journal" },
+        { text: "논문", link: "/publication/paper" },
+        { text: "특허", link: "/publication/patent" },
       ],
     },
-    { text: "Patent", link: "/patent" },
     { text: "Notice", link: "/notice" },
-    
     
     // 로그인 상태일 때만 "Write" 메뉴 추가
     ...(cookie.accessToken ? [{ text: "Write", link: "/board-write" }] : []),
@@ -69,7 +68,7 @@ export default function NavBar() {
       </div>
 
       {/* 네비게이션 바 */}
-      <div className="flex items-center relative z-10 hidden custom-mb:flex">
+      <div className="flex items-center relative z-10 hidden custom-mb:flex min-w-[1000px]">
         {menuItems.map((item, index) => (
           <React.Fragment key={index}>
             <div
@@ -83,16 +82,18 @@ export default function NavBar() {
                 <>
                   {item.text}
                   {item.subItems && (
-                    <div className="pt-2 absolute left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-white border border-customGray shadow-lg rounded-lg">
-                      {item.subItems.map((subItem, subIndex) => (
-                        <Link
-                          key={subIndex}
-                          to={subItem.link}
-                          className="block px-4 py-2 text-customGray hover:bg-gray-100"
-                        >
-                          {subItem.text}
-                        </Link>
-                      ))}
+                    <div className="pt-2 absolute left-1/2 transform -translate-x-1/2 hidden group-hover:block">
+                      <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-[120px]">
+                        {item.subItems.map((subItem, subIndex) => (
+                          <Link
+                            key={subIndex}
+                            to={subItem.link}
+                            className="block px-6 py-3 text-customGray hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 whitespace-nowrap text-sm"
+                          >
+                            {subItem.text}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </>

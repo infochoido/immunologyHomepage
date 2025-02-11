@@ -5,54 +5,52 @@ import TopBanner from "../components/Top_Banner";
 import SideBar from "../components/SideBar";
 import DetailPageGuide from "../components/DetailPageGuide";
 
-// 메뉴 데이터 정의
+
 const menuItems = [
+  { text: "교수님소개", link: "/professor",
+    subItems: [{ text: "교수님소개", link: "/professor" }],
+   },
   {
-    text: "Professor",
-    link: "/professor",
-    subItems: [{ text: "Professor", link: "/professor" }],
+    text: "실험실소개",
+    link: "/introduction",
+    subItems: [{ text: "실험실소개", link: "/introduction" }],
   },
+
   {
-    text: "Members",
+    text: "구성원 소개",
     link: null,
     subItems: [
       { text: "Members", link: "/member/members" },
-      { text: "Alumnis", link: "/member/alumnis" },
+      { text: "Alumni", link: "/member/alumnis" },
     ],
   },
   {
-    text: "Research",
-    link: null,
-    subItems: [
-      { text: "Research", link: "/research/research" },
-      { text: "Project", link: "/research/project" },
-    ],
+    text: "주요 실적",
+    link: "/achievements",
+    subItems: [{ text: "주요 실적", link: "/achievements" }],
   },
+
   {
     text: "Publication",
     link: null,
     subItems: [
-      { text: "Cover Selection", link: "/publication/cover-selection" },
-      { text: "Refereed Journal", link: "/publication/refereed-journal" },
+      { text: "논문", link: "/publication/paper" },
+      { text: "특허", link: "/publication/patent" },
     ],
   },
-  {
-    text: "Patent",
-    link: "/patent",
-    subItems: [{ text: "Patent", link: "/patent" }],
-  },
-  {
-    text: "Notice",
-    link: "/notice",
+  { text: "Notice", link: "/notice",
     subItems: [{ text: "Notice", link: "/notice" }],
-  },
+   },
+
+
   {
     text: "BoardDetail",
     link: "/boardDetail",
     subItems: [{ text: "BoardDetail", link: "/boardDetail" }],
   },
-];
+  
 
+];
 export default function Layout() {
   const location = useLocation();
   const showSidebar = location.pathname !== "/";
