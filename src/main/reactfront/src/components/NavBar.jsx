@@ -57,10 +57,10 @@ export default function NavBar() {
   };
 
   return (
-    <div className="flex justify-between h-[85px] custom-mb:px-[200px] px-12 items-center">
+    <div className="flex justify-between h-[85px] px-8 custom-mb:px-[10px] custom-lg:px-[150px] items-center">
       {/* 로고 */}
       <div className="flex gap-0 p-0 m-0 items-center">
-        <div className="w-[246px] h-16">
+        <div className="w-[240px] h-16">
           <Link to="/">
             <img src="../assets/logo.png" alt="logo" className="object-fit" />
           </Link>
@@ -68,11 +68,11 @@ export default function NavBar() {
       </div>
 
       {/* 네비게이션 바 */}
-      <div className="flex items-center relative z-10 hidden custom-mb:flex min-w-[1000px]">
+      <div className="flex items-center relative z-10 hidden custom-mb:flex min-w-[635px]">
         {menuItems.map((item, index) => (
           <React.Fragment key={index}>
             <div
-              className={`font-sans text-customGray text-md mx-8 hover:underline decoration-2 underline-offset-2 ${
+              className={`font-sans text-customGray text-md mx-4 hover:underline decoration-2 underline-offset-2 ${
                 item.subItems ? "group relative dropdown block cursor-pointer" : ""
               }`}
             >

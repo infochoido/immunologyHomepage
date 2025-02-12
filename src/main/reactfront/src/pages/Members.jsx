@@ -67,17 +67,17 @@ export default function Members() {
   };
 
   return (
-    <div className="w-full mx-auto px-12 py-8">
+    <div className="w-full mx-auto px-1 custom-md:px-12 py-4">
       <PageTitle/>
-      <div className="min-h-screen py-8 max-w-6xl">
+      <div className="min-h-screen py-8">
         <div className="space-y-6">
           {members.map((member) => (
             <div
               key={member.boardNumber}
-              className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex"
+              className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col md:flex-row"
             >
               {/* 이미지 섹션 */}
-              <div className="w-48 h-48 flex-shrink-0 p-4">
+              <div className="w-full md:w-48 h-48 flex-shrink-0 p-4">
                 <img
                   src={member.image}
                   alt={member.name}
@@ -86,8 +86,8 @@ export default function Members() {
               </div>
               
               {/* 정보 섹션 */}
-              <div className="flex-grow p-6 flex justify-between items-center">
-                <div>
+              <div className="flex-grow p-6 flex flex-col md:flex-row justify-between items-center">
+                <div className="text-center md:text-left">
                   <h2 className="text-2xl font-semibold mb-2">{member.name}</h2>
                   <p className="text-gray-600 mb-1">{member.email}</p>
                   <p className="text-gray-800">{member.degree}</p>
@@ -97,7 +97,7 @@ export default function Members() {
                 {cookies.accessToken && (
                   <button
                     onClick={() => handleDelete(member.boardNumber)}
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors ml-4"
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-colors mt-4 md:mt-0"
                   >
                     삭제
                   </button>

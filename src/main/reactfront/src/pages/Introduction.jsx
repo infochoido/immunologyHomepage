@@ -43,13 +43,13 @@ export default function Introduction() {
   };
 
   return (
-    <div className="w-full mx-auto px-12 py-8">
-      <h1 className="text-2xl font-bold mb-4">실험실 소개</h1>
+    <div className="w-full mx-auto px-1  custom-md:px-12 py-4">
+      <h1 className="text-2xl font-bold px-2 mb-4">실험실 소개</h1>
       
       {labIntro ? (
         <div className="bg-white overflow-hidden">
           {isLoggedIn && (
-            <div className="p-4 flex justify-end">
+            <div className="custom-md:p-4 p-2 flex justify-end">
               <button 
                 onClick={handleEdit}
                 className="px-4 py-2 bg-[#023793] text-white rounded hover:bg-[#034ABC] transition-colors"

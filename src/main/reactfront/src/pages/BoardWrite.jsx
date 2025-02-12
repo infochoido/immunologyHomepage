@@ -223,214 +223,218 @@ export default function BoardWrite() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div style={{ width: "100%", height: "90vh" }}>
-        <div style={{  margin: "auto", borderRadius: "19px" }}>
-          <div
-            style={{
-              marginBottom: "20px",
-              marginTop: "40px",
-              fontSize: "20px",
-              fontWeight: "bold",
-            }}
+    <div className="flex flex-col">
+      <div className="flex-1 custom-mb:px-4 px-2 py-8">
+        <div className="max-w-6xl mx-auto">
+          <div style={{ width: "100%", height: "800px" }}>
+            <div style={{  margin: "auto", borderRadius: "19px" }}>
+              <div
+                style={{
+                  marginBottom: "20px",
+                  marginTop: "20px",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                }}
+              >
+                글쓰기
+              </div>
+
+              {/* ======== Subject ======== */}
+              <div className="flex gap-4">
+                <input
+                  className="Subject"
+                  placeholder="제목을 입력해 주세요"
+                  style={{
+                    padding: "7px",
+                    marginBottom: "10px",
+                    width: "100%",
+                    border: "1px solid lightGray",
+                    fontSize: "15px",
+                    backgroundColor: category === 'Paper' || category === 'Members' || category === 'Alumni' ? '#f0f0f0' : 'white', // 비활성화 시 배경색 변경
+                  }}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  disabled={category === 'Paper' || category === 'Members' || category === 'Alumni'} // Paper, Members, Alumni 카테고리일 때 비활성화
+                />
+                <select
+                  className="Category"
+                  style={{
+                    padding: "7px",
+                    marginBottom: "10px",
+                    width: "20%",
+                    border: "1px solid lightGray",
+                    fontSize: "15px",
+                  }}
+                  value={category}
+                  onChange={handleCategoryChange}
+                >
+                  <option value={null}>카테고리 선택</option>
+                  <option value="Notice">Notice</option>
+
+                  <option value="Paper">논문</option>
+                  <option value="Patent">특허</option>
+                  <option value="Achievements">Achivements</option>
+
+
+                  <option value="Members">Members</option>
+                  <option value="Alumni">Alumni</option>
+                 
+                </select>
+              </div>
+
+              {/* Members나 Alumni 카테고리일 때 입력 폼 표시 */}
+              {(category === 'Members' || category === 'Alumni') ? (
+                <div className="member-inputs space-y-4 p-6 bg-gray-50 rounded-lg">
+                  <div className="mb-6">
+                    <div className="text-sm text-gray-500 mb-4">
+                      <span className="text-red-500">*</span> 표시는 필수 입력 항목입니다
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        프로필 이미지 <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="w-full p-2 border rounded bg-white"
+                        onChange={async (e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            try {
+                              const imageUrl = await uploadImage(file, cookies.accessToken);
+                              setMemberImage(imageUrl);
+                              setUploadedUrls([imageUrl]);
+                              console.log('업로드된 이미지 URL:', imageUrl); // 응답 확인
+                            } catch (error) {
+                              console.error('이미지 업로드 실패:', error);
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        이름 <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        className="w-full p-2 border rounded bg-white"
+                        placeholder="이름을 입력하세요"
+                        value={memberName}
+                        onChange={(e) => setMemberName(e.target.value)}
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        이메일 <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        className="w-full p-2 border rounded bg-white"
+                        placeholder="이메일을 입력하세요"
+                        value={memberEmail}
+                        onChange={(e) => setMemberEmail(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        학위 <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        className="w-full p-2 border rounded bg-white"
+                        value={memberDegree}
+                        onChange={(e) => setMemberDegree(e.target.value)}
+                      >
+                        <option value="">학위를 선택하세요</option>
+                        {category === 'Members' ? (
+                          <>
+                            <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
+                            <option value="Master Students">Master Students</option>
+                            <option value="Ph.D. Students">Ph.D. Students</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="Ph.D.">Ph.D.</option>
+                            <option value="M.S.">M.S.</option>
+                          </>
+                        )}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              ) : category === 'Paper' ? (
+                <div className="paper-inputs space-y-4 p-6 bg-gray-50 rounded-lg">
+                  <div className="text-sm text-gray-500 mb-4">
+                    <span className="text-red-500">*</span> 표시는 필수 입력 항목입니다
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      논문 제목 <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      className="w-full p-2 border rounded bg-white"
+                      placeholder="논문 제목을 입력하세요"
+                      value={paperTitle}
+                      onChange={(e) => setPaperTitle(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      저자 <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      className="w-full p-2 border rounded bg-white"
+                      placeholder="저자들을 콤마(,)로 구분하여 입력하세요"
+                      value={authors}
+                      onChange={(e) => setAuthors(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      출판일 <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      className="w-full p-2 border rounded bg-white"
+                      type="date"
+                      value={publishDate}
+                      onChange={(e) => setPublishDate(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      논문 링크
+                    </label>
+                    <input
+                      className="w-full p-2 border rounded bg-white"
+                      placeholder="논문 링크를 입력하세요 (선택사항)"
+                      value={paperLink}
+                      onChange={(e) => setPaperLink(e.target.value)}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="min-h-[500px]" key={category}>
+                  <ReactQuill
+                    ref={quillRef}
+                    modules={modules}
+                    formats={formats}
+                    value={content}
+                    placeholder="내용을 입력해 주세요"
+                    onChange={(value) => setContent(value)}
+                    style={{ height: "600px" }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="sticky bottom-0 bg-white pb-12 pt-4 px-8 shadow-md">
+        <div className="max-w-6xl mx-auto text-right">
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-[#023793] text-white rounded hover:bg-[#034ABC] transition-colors"
           >
-            글쓰기
-          </div>
-
-          {/* ======== Subject ======== */}
-          <div className="flex gap-4">
-            <input
-              className="Subject"
-              placeholder="제목을 입력해 주세요"
-              style={{
-                padding: "7px",
-                marginBottom: "10px",
-                width: "100%",
-                border: "1px solid lightGray",
-                fontSize: "15px",
-                backgroundColor: category === 'Paper' || category === 'Members' || category === 'Alumni' ? '#f0f0f0' : 'white', // 비활성화 시 배경색 변경
-              }}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              disabled={category === 'Paper' || category === 'Members' || category === 'Alumni'} // Paper, Members, Alumni 카테고리일 때 비활성화
-            />
-            <select
-              className="Category"
-              style={{
-                padding: "7px",
-                marginBottom: "10px",
-                width: "20%",
-                border: "1px solid lightGray",
-                fontSize: "15px",
-              }}
-              value={category}
-              onChange={handleCategoryChange}
-            >
-              <option value={null}>카테고리 선택</option>
-              <option value="Notice">Notice</option>
-
-              <option value="Paper">논문</option>
-              <option value="Patent">특허</option>
-              <option value="Achievements">업적</option>
-
-
-              <option value="Members">Members</option>
-              <option value="Alumni">Alumni</option>
-             
-            </select>
-          </div>
-
-          {/* Members나 Alumni 카테고리일 때 입력 폼 표시 */}
-          {(category === 'Members' || category === 'Alumni') ? (
-            <div className="member-inputs space-y-4 p-6 bg-gray-50 rounded-lg">
-              <div className="mb-6">
-                <div className="text-sm text-gray-500 mb-4">
-                  <span className="text-red-500">*</span> 표시는 필수 입력 항목입니다
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    프로필 이미지 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="w-full p-2 border rounded bg-white"
-                    onChange={async (e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        try {
-                          const imageUrl = await uploadImage(file, cookies.accessToken);
-                          setMemberImage(imageUrl);
-                          setUploadedUrls([imageUrl]);
-                          console.log('업로드된 이미지 URL:', imageUrl); // 응답 확인
-                        } catch (error) {
-                          console.error('이미지 업로드 실패:', error);
-                        }
-                      }
-                    }}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    이름 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    className="w-full p-2 border rounded bg-white"
-                    placeholder="이름을 입력하세요"
-                    value={memberName}
-                    onChange={(e) => setMemberName(e.target.value)}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    이메일 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    className="w-full p-2 border rounded bg-white"
-                    placeholder="이메일을 입력하세요"
-                    value={memberEmail}
-                    onChange={(e) => setMemberEmail(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    학위 <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    className="w-full p-2 border rounded bg-white"
-                    value={memberDegree}
-                    onChange={(e) => setMemberDegree(e.target.value)}
-                  >
-                    <option value="">학위를 선택하세요</option>
-                    {category === 'Members' ? (
-                      <>
-                        <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
-                        <option value="Master Students">Master Students</option>
-                        <option value="Ph.D. Students">Ph.D. Students</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="Ph.D.">Ph.D.</option>
-                        <option value="M.S.">M.S.</option>
-                      </>
-                    )}
-                  </select>
-                </div>
-              </div>
-            </div>
-          ) : category === 'Paper' ? (
-            <div className="paper-inputs space-y-4 p-6 bg-gray-50 rounded-lg">
-              <div className="text-sm text-gray-500 mb-4">
-                <span className="text-red-500">*</span> 표시는 필수 입력 항목입니다
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  논문 제목 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  className="w-full p-2 border rounded bg-white"
-                  placeholder="논문 제목을 입력하세요"
-                  value={paperTitle}
-                  onChange={(e) => setPaperTitle(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  저자 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  className="w-full p-2 border rounded bg-white"
-                  placeholder="저자들을 콤마(,)로 구분하여 입력하세요"
-                  value={authors}
-                  onChange={(e) => setAuthors(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  출판일 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  className="w-full p-2 border rounded bg-white"
-                  type="date"
-                  value={publishDate}
-                  onChange={(e) => setPublishDate(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  논문 링크
-                </label>
-                <input
-                  className="w-full p-2 border rounded bg-white"
-                  placeholder="논문 링크를 입력하세요 (선택사항)"
-                  value={paperLink}
-                  onChange={(e) => setPaperLink(e.target.value)}
-                />
-              </div>
-            </div>
-          ) : (
-            <div style={{ height: "650px" }} key={category}>
-              <ReactQuill
-                ref={quillRef}
-                modules={modules}
-                formats={formats}
-                value={content}
-                placeholder="내용을 입력해 주세요"
-                onChange={(value) => setContent(value)}
-                style={{ height: "600px" }}
-              />
-            </div>
-          )}
-
-          {/* ======== Button ======== */}
-          <div className="flex justify-end mt-5">
-            <button
-              className="px-4 py-2 rounded-md bg-[#023793] text-white font-semibold hover:bg-[#034ABC] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none"
-              onClick={handleSubmit}
-            >
-              업로드
-            </button>
-          </div>
+            작성 완료
+          </button>
         </div>
       </div>
     </div>

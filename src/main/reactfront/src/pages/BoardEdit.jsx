@@ -178,14 +178,14 @@ export default function BoardEdit() {
           </select>
         </div>
 
-        <div className="min-h-[600px] mb-8">
+        <div className="min-h-[600px] mb-12">
           <ReactQuill
             ref={quillRef}
             value={content}
             onChange={setContent}
             modules={modules}
-            className="h-[500px]"
-            style={{ height: '500px' }}
+            className="h-[600px]"
+            style={{ height: '600px' }}
           />
         </div>
 

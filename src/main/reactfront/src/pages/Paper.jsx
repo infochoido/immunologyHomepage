@@ -70,7 +70,7 @@ export default function Paper() {
   }, []);
 
   return (
-    <div className="w-full mx-auto px-12 py-8">
+    <div className="w-full mx-auto px-2  custom-mb:px-12  py-4">
       <PageTitle />
       
       <div className="mt-12 space-y-12">

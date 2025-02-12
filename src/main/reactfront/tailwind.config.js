@@ -16,6 +16,7 @@ module.exports = {
       },
       screens: {
         'custom-mb': '1000px',
+        'custom-lg': '1300px',
       },// 모바일 환경에서 css 이걸로 쓰십쇼
       fontSize: {
         base: '1rem',

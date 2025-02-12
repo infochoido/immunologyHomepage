@@ -76,7 +76,7 @@ export default function Professor() {
     };
 
     return (
-        <div className="w-full mx-auto px-12 py-8">
+        <div className="w-full mx-auto py-8 px-1  custom-md:px-12">
             <PageTitle />
             <div className="relative  mx-auto">
                 {cookies.accessToken && (
