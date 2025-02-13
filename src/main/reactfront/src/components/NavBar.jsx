@@ -17,36 +17,32 @@ export default function NavBar() {
   const [cookie] = useCookies();
 
   const menuItems = [
-    { text: "교수님소개", link: "/professor" },
+    { text: "교수", link: "/professor" },
     {
-      text: "실험실소개",
+      text: "실험실 소개",
       link: "/introduction",
     },
     {
-      text: "구성원 소개",
+      text: "구성원",
       link: null,
       subItems: [
-        { text: "Members", link: "/member/members" },
-        { text: "Alumni", link: "/member/alumnis" },
+        { text: "연구진", link: "/member/members" },
+        { text: "네트워크", link: "/member/alumnis" },
       ],
     },
-    // {
-    //   text: "주요 실적",
-    //   link: "/achievements",
-    // },
-    
+
     {
-      text: "Publication",
+      text: "연구실적",
       link: null,
       subItems: [
         { text: "논문", link: "/publication/paper" },
         { text: "특허", link: "/publication/patent" },
       ],
     },
-    { text: "Notice", link: "/notice" },
+    { text: "공지사항", link: "/notice" },
     
     // 로그인 상태일 때만 "Write" 메뉴 추가
-    ...(cookie.accessToken ? [{ text: "Write", link: "/board-write" }] : []),
+    ...(cookie.accessToken ? [{ text: "글쓰기", link: "/board-write" }] : []),
   ];
 
   const toggleSubMenu = (menu) => {
@@ -83,7 +79,7 @@ export default function NavBar() {
                   {item.text}
                   {item.subItems && (
                     <div className="pt-2 absolute left-1/2 transform -translate-x-1/2 hidden group-hover:block">
-                      <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-[120px]">
+                      <div className="text-center bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-[120px]">
                         {item.subItems.map((subItem, subIndex) => (
                           <Link
                             key={subIndex}

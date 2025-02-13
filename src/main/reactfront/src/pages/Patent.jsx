@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import PageTitle from "../components/PageTitle";
 import { getBoardByCategory } from "../apis";
 
 export default function Patent() {
@@ -34,7 +33,6 @@ export default function Patent() {
 
   return (
     <div className="w-full">
-      <PageTitle />
       <div className="px-1 custom-md:px-12">
         <table className="mt-8 table table-lg text-center min-w-full">
           <thead>

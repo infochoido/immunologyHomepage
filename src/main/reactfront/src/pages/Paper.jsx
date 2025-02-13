@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import PageTitle from "../components/PageTitle";
 import { getBoardByCategory, deleteBoardRequest } from "../apis";
 import { useCookies } from "react-cookie";
 
 export default function Paper() {
   const [papersByYear, setPapersByYear] = useState({});
   const [cookies] = useCookies(['accessToken']);
-  const navigate = useNavigate();
 
   const handleDelete = async (boardNumber) => {
     if (window.confirm('이 논문을 삭제하시겠습니까?')) {
@@ -71,7 +68,6 @@ export default function Paper() {
 
   return (
     <div className="w-full mx-auto px-2  custom-mb:px-12  py-4">
-      <PageTitle />
       
       <div className="mt-12 space-y-12">
         {Object.entries(papersByYear).map(([year, papers]) => (

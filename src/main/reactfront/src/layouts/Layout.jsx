@@ -5,7 +5,6 @@ import TopBanner from "../components/Top_Banner";
 import SideBar from "../components/SideBar";
 import DetailPageGuide from "../components/DetailPageGuide";
 
-
 const menuItems = [
   { text: "교수님소개", link: "/professor",
     subItems: [{ text: "교수님소개", link: "/professor" }],
@@ -72,7 +71,7 @@ export default function Layout() {
       {showSidebar && <DetailPageGuide />}
 
       <div
-        className={`flex-1 ${
+        className={`flex ${
           showSidebar
             ? " px-4 py-6 flex gap-8 custom-mb:mx-[100px]"
             : "w-full"
@@ -96,6 +95,8 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+      
+
 
       <footer className="bg-gray-800 text-white mt-auto">
         <Footer />
