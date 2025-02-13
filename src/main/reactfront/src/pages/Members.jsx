@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PageTitle from "../components/PageTitle";
 import { getBoardByCategory, deleteBoardRequest } from "../apis";
 import { useCookies } from "react-cookie";
 
@@ -68,7 +67,6 @@ export default function Members() {
 
   return (
     <div className="w-full mx-auto px-1 custom-md:px-12 py-4">
-      <PageTitle/>
       <div className="min-h-screen py-8">
         <div className="space-y-6">
           {members.map((member) => (

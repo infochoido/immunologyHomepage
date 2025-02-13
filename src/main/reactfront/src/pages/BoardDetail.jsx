@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import PageTitle from "../components/PageTitle";
 import { getBoardDetail, deleteBoardRequest } from "../apis";
 import { useCookies } from 'react-cookie';
-import { useLoginuserStore } from "../stores/store";
+
 
 export default function BoardDetail() {
   const [data, setData] = useState(null); // 서버에서 가져온 데이터를 저장
@@ -13,7 +12,6 @@ export default function BoardDetail() {
   const writeDatetime = location.state?.writeDatetime;  // 전달받은 날짜 정보
   const [cookies] = useCookies(['accessToken']);
   const navigate = useNavigate();
-  const { loginUser } = useLoginuserStore();
 
   useEffect(() => {
     const fetchData = async () => {

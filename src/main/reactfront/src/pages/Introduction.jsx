@@ -44,7 +44,7 @@ export default function Introduction() {
 
   return (
     <div className="w-full mx-auto px-1  custom-md:px-12 py-4">
-      <h1 className="text-2xl font-bold px-2 mb-4">실험실 소개</h1>
+      <h1 className="text-xl px-2 mb-4">실험실 소개</h1>
       
       {labIntro ? (
         <div className="bg-white overflow-hidden">

@@ -3,6 +3,7 @@ import Banner from "../components/Banner";
 import InfoCard from "../components/InfoCard";
 import { getBoardByCategory } from "../apis";
 import { Link } from "react-router-dom";
+import HomepageSlider from "../components/HomepageSlider"
 
 export default function Home() {
   const [noticeData, setNoticeData] = useState([]);
@@ -51,13 +52,18 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative">
-      <Banner />
-      <div className="-mt-[330px] relative z-10">
-        <InfoCard />
-        
-       
+    <div>
+      <div className="relative">
+        <Banner />
+        <div className = "-mt-[330px] relative z-10">
+          <InfoCard />
         </div>
+      </div>
+
+      <div className = "mt-[120px] mb-[40px] relative z-10">
+          <HomepageSlider />
+      </div>
+
     </div>
   );
 }

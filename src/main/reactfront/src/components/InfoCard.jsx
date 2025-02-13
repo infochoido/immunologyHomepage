@@ -9,7 +9,7 @@ export default function InfoCards() {
     },
     {
       title: "실험실 소개",
-      subtitle: "Lab introduction",
+      subtitle: "Lab Introduction",
       color: "bg-cardBlue2",
       image: "../assets/clinical.jpg",
       link: "/introduction",
