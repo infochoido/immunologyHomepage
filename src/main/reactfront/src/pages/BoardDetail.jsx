@@ -91,7 +91,7 @@ export default function BoardDetail() {
             </div>
 
             {/* 컨텐츠 섹션 */}
-            <div className="p-6">
+            <div className="p-6 min-h-72">
               <div
                 className="prose max-w-none text-gray-800"
                 dangerouslySetInnerHTML={{ __html: data.content }}

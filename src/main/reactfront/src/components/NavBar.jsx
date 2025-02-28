@@ -39,7 +39,7 @@ export default function NavBar() {
         { text: "특허", link: "/publication/patent" },
       ],
     },
-    { text: "공지사항", link: "/notice" },
+    { text: "새 소식", link: "/notice" },
     
     // 로그인 상태일 때만 "Write" 메뉴 추가
     ...(cookie.accessToken ? [{ text: "글쓰기", link: "/board-write" }] : []),

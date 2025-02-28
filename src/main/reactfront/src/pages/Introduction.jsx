@@ -43,17 +43,20 @@ export default function Introduction() {
   };
 
   return (
-    <div className="w-full mx-auto px-1  custom-md:px-12 py-4">
-      <h1 className="text-xl px-2 mb-4">실험실 소개</h1>
+    <div className="w-full mx-auto px-2 custom-md:px-12 py-4">
+      <h1 className="text-2xl px-4 mb-4 font-bold">실험실 소개</h1>
       
       {labIntro ? (
         <div className="bg-white overflow-hidden">
           {isLoggedIn && (
             <div className="custom-md:p-4 p-2 flex justify-end">
-              <button 
+              <button
                 onClick={handleEdit}
-                className="px-4 py-2 bg-[#023793] text-white rounded hover:bg-[#034ABC] transition-colors"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
+                <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
                 수정
               </button>
             </div>

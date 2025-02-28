@@ -84,7 +84,7 @@ export default function BoardEdit() {
           setCategory(currentCategory);
           
           if (currentCategory === 'Professor') {
-            setContent(location.state.fixedProfile + response.content);
+            setContent(response.content);
           } else if (currentCategory === 'Introduction') {
             setContent(response.content);
           } else {

@@ -148,6 +148,16 @@ export default function BoardWrite() {
         finalContent = JSON.stringify(memberData);
       }
 
+      if( category === "Paper"){
+        const paperData = {
+          paperTitle: paperTitle,
+          authors: authors,
+          publishDate: publishDate,
+          paperLink: paperLink
+        };
+        finalContent = JSON.stringify(paperData);
+      }
+
       const requestBody = {
         title,
         content: finalContent,
@@ -168,6 +178,7 @@ export default function BoardWrite() {
         }
         resetBoard();
       } else {
+        console.log(response.code)
         alert("게시글 등록에 실패했습니다.");
       }
     } catch (error) {
@@ -269,15 +280,15 @@ export default function BoardWrite() {
                   onChange={handleCategoryChange}
                 >
                   <option value={null}>카테고리 선택</option>
-                  <option value="Notice">Notice</option>
+                  <option value="Notice">새 소식</option>
 
                   <option value="Paper">논문</option>
                   <option value="Patent">특허</option>
-                  <option value="Achievements">Achivements</option>
+                  <option value="Achievements">Achievements</option>
 
 
-                  <option value="Members">Members</option>
-                  <option value="Alumni">Alumni</option>
+                  <option value="Members">연구진</option>
+                  <option value="Alumni">네트워크</option>
                  
                 </select>
               </div>
@@ -346,14 +357,16 @@ export default function BoardWrite() {
                         <option value="">학위를 선택하세요</option>
                         {category === 'Members' ? (
                           <>
-                            <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
-                            <option value="Master Students">Master Students</option>
-                            <option value="Ph.D. Students">Ph.D. Students</option>
+                            <option value="시간제 박사 과정">시간제 박사 과정</option>
+                            <option value="석사 과정">석사 과정</option>
+                            <option value="박사 과정">박사 과정</option>
+                            <option value="학부 과정">학부 과정</option>
                           </>
+
                         ) : (
                           <>
-                            <option value="Ph.D.">Ph.D.</option>
-                            <option value="M.S.">M.S.</option>
+                            <option value="석사 과정 졸업생">석사 과정 졸업생</option>
+                            <option value="박사 과정 졸업생">박사 과정 졸업생</option>
                           </>
                         )}
                       </select>

@@ -32,7 +32,8 @@ export default function Patent() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full py-4 px-2">
+      <h1 className="text-2xl px-4 mb-4 font-bold">특허</h1>
       <div className="px-1 custom-md:px-12">
         <table className="mt-8 table table-lg text-center min-w-full">
           <thead>

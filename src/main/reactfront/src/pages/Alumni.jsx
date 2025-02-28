@@ -65,46 +65,61 @@ export default function Alumni() {
     }
   };
 
+  // degree 별로 멤버 그룹화
+  const groupedMembers = members.reduce((acc, member) => {
+    const { degree } = member;
+    if (!acc[degree]) {
+      acc[degree] = [];
+    }
+    acc[degree].push(member);
+    return acc;
+  }, {});
+
   return (
-    <div className="w-full mx-auto px-1 custom-md:px-12 py-4">
+    <div className="w-full mx-auto px-1 custom-mb:px-12 py-4">
       <div className="min-h-screen py-8">
         <div className="space-y-6">
-          {members.map((member) => (
-            <div
-              key={member.boardNumber}
-              className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col md:flex-row"
-            >
-              {/* 이미지 섹션 */}
-              <div className="w-full md:w-48 h-48 flex-shrink-0 p-4">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              
-              {/* 정보 섹션 */}
-              <div className="flex-grow p-6 flex flex-col md:flex-row justify-between items-center">
-                <div className="text-center md:text-left">
-                  <h2 className="text-2xl font-semibold mb-2">{member.name}</h2>
-                  <p className="text-gray-600 mb-1">{member.email}</p>
-                  <p className="text-gray-800">{member.degree}</p>
+          {Object.keys(groupedMembers).map((degree) => (
+            <div key={degree}>
+              <h2 className="text-3xl font-semibold mb-4">{degree}</h2>
+              {groupedMembers[degree].map((member) => (
+                <div
+                  key={member.boardNumber}
+                  className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col md:flex-row"
+                >
+                  {/* 이미지 섹션 */}
+                  <div className="w-full md:w-48 h-48 flex-shrink-0 p-4">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  {/* 정보 섹션 */}
+                  <div className="flex-grow p-6 flex flex-col md:flex-row justify-between items-center">
+                    <div className="text-center md:text-left">
+                      <h2 className="text-2xl font-semibold mb-2">{member.name}</h2>
+                      <p className="text-gray-600 mb-1">{member.email}</p>
+                      <p className="text-gray-800">{member.degree}</p>
+                    </div>
+                    
+                    {/* 삭제 버튼 */}
+                    {cookies.accessToken && (
+                      <button
+                        onClick={() => handleDelete(member.boardNumber)}
+                        className="text-red-500 hover:text-red-700 px-3 py-1 rounded-md hover:bg-red-50 transition-colors"
+                      >
+                        삭제
+                      </button>
+                    )}
+                  </div>
                 </div>
-                
-                {/* 삭제 버튼 */}
-                {cookies.accessToken && (
-                  <button
-                    onClick={() => handleDelete(member.boardNumber)}
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-colors mt-4 md:mt-0"
-                  >
-                    삭제
-                  </button>
-                )}
-              </div>
+              ))}
             </div>
           ))}
         </div>
       </div>
     </div>
   );
-}  
+}
