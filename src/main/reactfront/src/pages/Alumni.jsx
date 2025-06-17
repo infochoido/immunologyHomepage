@@ -6,10 +6,12 @@ export default function Alumni() {
   const [members, setMembers] = useState([]);
   const [cookies] = useCookies(['accessToken']);
 
+  
+
   const fetchMembers = async () => {
     try {
       const response = await getBoardByCategory("Alumni");
-      
+  
       if (response && response.categoryList) {
         const parsedMembers = response.categoryList.map(post => {
           try {
@@ -27,6 +29,20 @@ export default function Alumni() {
           }
         }).filter(member => member !== null);
 
+  
+        const degreeOrder = {
+          "박사 과정": 0,
+          "석사 과정": 1,
+          "학부 과정": 2
+        };
+  
+        // 정렬: 학위 순서 > 이름 순
+        parsedMembers.sort((a, b) => {
+          const degreeComparison = (degreeOrder[a.degree] ?? 99) - (degreeOrder[b.degree] ?? 99);
+          if (degreeComparison !== 0) return degreeComparison;
+          return a.name.localeCompare(b.name); // 이름 오름차순
+        });
+  
         setMembers(parsedMembers);
       }
     } catch (error) {
@@ -65,6 +81,8 @@ export default function Alumni() {
     }
   };
 
+  
+
   return (
     <div className="w-full mx-auto px-1 custom-md:px-12 py-4">
       <div className="min-h-screen py-8">
@@ -72,10 +90,10 @@ export default function Alumni() {
           {members.map((member) => (
             <div
               key={member.boardNumber}
-              className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col md:flex-row"
+              className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col md:flex-row items-center"
             >
               {/* 이미지 섹션 */}
-              <div className="w-full md:w-48 h-48 flex-shrink-0 p-4">
+              <div className="custom-mb:w-48 h-48 w-48 flex-shrink-0 p-4">
                 <img
                   src={member.image}
                   alt={member.name}

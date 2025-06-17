@@ -84,7 +84,7 @@ public class WebSecurityConfig {
         
         // 허용할 origin 추가
         config.setAllowedOrigins(Arrays.asList(
-            "https://jbnuvetmedimmunelab.store",
+            "https://vetimmune.jbnu.ac.kr",
             "http://localhost:3000"
         ));
         

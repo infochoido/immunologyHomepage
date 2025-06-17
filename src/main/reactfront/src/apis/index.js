@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'https://jbnuvetmedimmunelab.store';  // 빈 문자열로 설정하여 상대 경로 사용
+const BASE_URL = 'https://vetimmune.jbnu.ac.kr';  // 빈 문자열로 설정하여 상대 경로 사용
 
 const instance = axios.create({
     baseURL: '',

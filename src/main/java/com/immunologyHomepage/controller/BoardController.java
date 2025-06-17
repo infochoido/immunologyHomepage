@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/board")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://jbnuvetmedimmunelab.store", "http://localhost:3000"}, 
+@CrossOrigin(origins = {"https://vetimmune.jbnu.ac.kr", "http://localhost:3000"}, 
              allowCredentials = "true")
 public class BoardController {
     

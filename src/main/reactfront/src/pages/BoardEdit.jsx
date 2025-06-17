@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+// import 'react-quill-new/dist/quill.snow.css';
 import { getBoardDetail, putBoardRequest, uploadImage } from '../apis';
 
 export default function BoardEdit() {
@@ -16,7 +16,7 @@ export default function BoardEdit() {
   const [cookies] = useCookies(['accessToken']);
   const navigate = useNavigate();
   const { boardNumber } = useParams();
-  const quillRef = React.useRef();
+  const quillRef = useRef();
   const location = useLocation();
 
   const imageHandler = useCallback(() => {
@@ -35,7 +35,7 @@ export default function BoardEdit() {
             
             
             // 에디터에 표시할 전체 URL
-            const fullUrl = `https://jbnuvetmedimmunelab.store${imageUrl}`;
+            const fullUrl = `https://vetimmune.jbnu.ac.kr${imageUrl}`;
             quillEditor.insertEmbed(range.index, 'image', fullUrl);
             
             // 이미지 스타일 설정
@@ -151,48 +151,52 @@ export default function BoardEdit() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="text-2xl font-bold mb-4">글 수정페이지</div>
-      
-      <div className="mt-8">
-        <div className="flex gap-4 mb-4">
-          <input
-            className="flex-1 p-2 border rounded"
-            placeholder="제목"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-32 p-2 border rounded bg-white"
-          >
-            <option value="">카테고리</option>
-            <option value="Notice">공지사항</option>
-            <option value="Research">연구</option>
-            <option value="Paper">논문</option>
-            <option value="Members">구성원</option>
-            <option value="Alumni">졸업생</option>
-            <option value="Professor">교수</option>
-            <option value="Introduction">실험실 소개</option>
-          </select>
-        </div>
+    <div className="flex flex-col">
+      <div className="flex-1 custom-mb:px-4 pb-24 px-2">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-2xl font-bold mb-4">글 수정페이지</div>
+          
+          <div className="mt-8">
+            <div className="flex gap-4 mb-4">
+              <input
+                className="flex-1 p-2 border rounded"
+                placeholder="제목"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-32 p-2 border rounded bg-white"
+              >
+                <option value="">카테고리</option>
+                <option value="Notice">공지사항</option>
+                <option value="Research">연구</option>
+                <option value="Paper">논문</option>
+                <option value="Members">구성원</option>
+                <option value="Alumni">졸업생</option>
+                <option value="Professor">교수</option>
+                <option value="Introduction">실험실 소개</option>
+              </select>
+            </div>
 
-        <div className="min-h-[600px] mb-12">
-          <ReactQuill
-            ref={quillRef}
-            value={content}
-            onChange={setContent}
-            modules={modules}
-            className="h-[600px]"
-            style={{ height: '600px' }}
-          />
+            <div className="min-h-[500px] mb-6">
+              <ReactQuill
+                ref={quillRef}
+                value={content}
+                onChange={setContent}
+                modules={modules}
+                style={{ height: '600px' }}
+              />
+            </div>
+          </div>
         </div>
-
-        <div className="flex justify-end gap-4 mt-6">
+      </div>
+      <div className="sticky bottom-0 bg-white px-8 pb-4 shadow-md">
+        <div className="max-w-6xl mx-auto text-right">
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-2.5 rounded text-gray-600 font-medium hover:bg-gray-100 transition-colors border border-gray-300"
+            className="px-6 py-2.5 rounded text-gray-600 font-medium hover:bg-gray-100 transition-colors border border-gray-300 mr-2"
           >
             취소
           </button>

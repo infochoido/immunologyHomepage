@@ -56,7 +56,7 @@ export default function BoardWrite() {
             }
             
             // 에디터에 표시할 전체 URL
-            const fullUrl = `https://jbnuvetmedimmunelab.store/api/v1/images/${imageUrl}`;
+            const fullUrl = `https://vetimmune.jbnu.ac.kr/api/v1/images/${imageUrl}`;
             const quillEditor = quillRef.current.getEditor();
             const range = quillEditor.getSelection(true);
             quillEditor.insertEmbed(range.index, 'image', fullUrl);
@@ -346,9 +346,9 @@ export default function BoardWrite() {
                         <option value="">학위를 선택하세요</option>
                         {category === 'Members' ? (
                           <>
-                            <option value="Part Time Ph.D. Students">Part Time Ph.D. Students</option>
-                            <option value="Master Students">Master Students</option>
-                            <option value="Ph.D. Students">Ph.D. Students</option>
+                            <option value="박사 과정">박사 과정</option>
+                            <option value="석사 과정">석사 과정</option>
+                            <option value="학부 과정">학부 과정</option>
                           </>
                         ) : (
                           <>
@@ -427,7 +427,7 @@ export default function BoardWrite() {
           </div>
         </div>
       </div>
-      <div className="sticky bottom-0 bg-white pb-12 pt-4 px-8 shadow-md">
+      <div className="sticky bottom-0 bg-white pb-4 pt-4 px-8 shadow-md">
         <div className="max-w-6xl mx-auto text-right">
           <button
             onClick={handleSubmit}

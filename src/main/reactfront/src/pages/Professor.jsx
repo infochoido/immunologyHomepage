@@ -39,7 +39,7 @@ export default function Professor() {
                             </tr>
                             <tr>
                                 <td class="py-1 pr-4 font-semibold">이메일</td>
-                                <td>kwi0621@jbnu.ac.kr</td>
+                                <td id="email-placeholder"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -61,9 +61,19 @@ export default function Professor() {
                 console.error("교수 정보 로딩 실패:", error);
             }
         };
+        
 
         fetchProfessorData();
+
+        const email = "kwi0621" + "@" + "jbnu.ac.kr";
+        const placeholder = document.getElementById("email-placeholder");
+        if (placeholder) {
+            placeholder.innerText = email;
+        }
+
+        
     }, []);
+
 
     const handleEdit = () => {
         navigate(`/board/edit/${boardNumber}`, {
