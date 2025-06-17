@@ -18,7 +18,7 @@ export default function Achievements() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getBoardByCategory("Achivements");
+        const response = await getBoardByCategory("Achievements");
         if (response) {
           const formattedData = response.categoryList.map((item) => ({
             board_number: item.boardNumber,

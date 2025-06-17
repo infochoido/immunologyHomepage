@@ -35,9 +35,9 @@ export default function SideBar() {
       ],
     },
     {
-      text: "공지사항",
+      text: "새 소식",
       subItems: [
-        { text: "공지사항", link: "/notice" },
+        { text: "새 소식", link: "/notice" },
       ],
     },
   ];

@@ -26,20 +26,25 @@ export default function Professor() {
                     <table class="w-full text-left border-collapse">
                         <tbody>
                             <tr>
-                                <td class="py-1 pr-4 font-semibold">전공</td>
+                                <td class="py-1 font-semibold">전공</td>
                                 <td>수의면역학</td>
                             </tr>
                             <tr>
-                                <td class="py-1 pr-4 font-semibold">직위</td>
+                                <td class="py-1  font-semibold">직위</td>
                                 <td>교수</td>
                             </tr>
                             <tr>
-                                <td class="py-1 pr-4 font-semibold">전화번호</td>
+                                <td class="py-1  font-semibold">전화번호</td>
                                 <td>063)850-0958</td>
                             </tr>
                             <tr>
+<<<<<<< HEAD
                                 <td class="py-1 pr-4 font-semibold">이메일</td>
                                 <td id="email-placeholder"></td>
+=======
+                                <td class="py-1  font-semibold">이메일</td>
+                                <td>kwi0621@jbnu.ac.kr</td>
+>>>>>>> a46708ae3fed22194846e4998a39c114397bd832
                             </tr>
                         </tbody>
                     </table>
@@ -85,14 +90,17 @@ export default function Professor() {
     };
 
     return (
-        <div className="w-full mx-auto py-8 px-1  custom-md:px-12">
-            <div className="relative  mx-auto">
+        <div className="w-full mx-auto py-4 px-1 custom-md:px-12">
+            <div className="relative mx-auto">
                 {cookies.accessToken && (
                     <div className="absolute top-4 right-4">
                         <button
                             onClick={handleEdit}
-                            className="px-4 py-2 bg-[#023793] text-white rounded hover:bg-[#034ABC] transition-colors"
+                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
+                            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
                             수정
                         </button>
                     </div>

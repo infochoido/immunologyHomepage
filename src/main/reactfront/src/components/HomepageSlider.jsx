@@ -84,19 +84,22 @@ export default function HomepageSlider() {
         ))}
       </Swiper>
 
-      {/* 커스텀 네비게이션 버튼 */}
-      <button
-        ref={prevRef}
-        className="absolute top-1/2 -left-12 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 hover:scale-110 transition cursor-pointer z-50"
-      >
-        <ChevronLeft className="text-gray-600 w-5 h-5" />
-      </button>
-      <button
-        ref={nextRef}
-        className="absolute top-1/2 -right-12 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 hover:scale-110 transition cursor-pointer z-50"
-      >
-        <ChevronRight className="text-gray-600 w-5 h-5" />
-      </button>
+{/* 왼쪽 화살표 버튼 */}
+<button
+  ref={prevRef}
+  className="hidden custom-mb:flex absolute top-1/2 -left-12 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 hover:scale-110 transition cursor-pointer z-50"
+>
+  <ChevronLeft className="text-gray-600 w-5 h-5" />
+</button>
+
+{/* 오른쪽 화살표 버튼 */}
+<button
+  ref={nextRef}
+  className="hidden custom-mb:flex absolute top-1/2 -right-12 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 hover:scale-110 transition cursor-pointer z-50"
+>
+  <ChevronRight className="text-gray-600 w-5 h-5" />
+</button>
+
     </div>
   );
 }
