@@ -38,13 +38,8 @@ export default function Professor() {
                                 <td>063)850-0958</td>
                             </tr>
                             <tr>
-<<<<<<< HEAD
                                 <td class="py-1 pr-4 font-semibold">이메일</td>
                                 <td id="email-placeholder"></td>
-=======
-                                <td class="py-1  font-semibold">이메일</td>
-                                <td>kwi0621@jbnu.ac.kr</td>
->>>>>>> a46708ae3fed22194846e4998a39c114397bd832
                             </tr>
                         </tbody>
                     </table>
